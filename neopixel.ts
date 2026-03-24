@@ -247,9 +247,13 @@ namespace neopixel {
         //% weight=79
         //% parts="neopixel"
         show() {
-            // only supported in beta
-            // ws2812b.setBufferMode(this.pin, this._mode);
-            ws2812b.sendBuffer(this.buf, this.pin);
+            //% ignore
+            const ws2812b = (control as any).ws2812b;
+            if (ws2812b) {
+                ws2812b.sendBuffer(this.buf, this.pin);
+            } else {
+                (pins as any).sendWS2812Buffer(this.buf, this.pin);
+            }
         }
 
         /**
