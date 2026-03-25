@@ -23,7 +23,8 @@
     ],
     "public": true,
     "supportedTargets": [
-        "microbit"
+        "microbit",
+        "maker"
     ],
     "preferredEditor": "tsprj",
     "yotta": {

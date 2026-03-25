@@ -33,43 +33,64 @@
     sub.showBarGraph(5, 10);
     basic.pause(200);
 
+    strip.setMatrixWidth(8);
+    strip.setMatrixColor(0, 0, NeoPixelColors.Red);
+    strip.setMatrixColor(1, 1, NeoPixelColors.Green);
+    strip.show();
+    basic.pause(200);
+
+    strip.easeBrightness();
+    strip.show();
+    basic.pause(200);
+
+    let p = strip.power();
+
     let br = 100;
     strip.setBrightness(100);
-    input.onButtonPressed(Button.B, () => {
-        br = br + 20;
-        if (br > 255) {
-            br = 5;
-        }
-        strip.setBrightness(br);
-    });
+    if (typeof input !== "undefined") {
+        (input as any).onButtonPressed(2 /* Button.B */, () => {
+            br = br + 20;
+            if (br > 255) {
+                br = 5;
+            }
+            strip.setBrightness(br);
+        });
+    }
 
     let rotationMode = false;
-    input.onButtonPressed(Button.A, () => {
-        rotationMode = !rotationMode;
-        if (rotationMode) {
-            basic.showLeds(`
-            . # # # .
-            # . . . #
-            # . . . #
-            # . . . #
-            . # # # .
-            `);
-        } else {
-            basic.showLeds(`
-            . . # . .
-            . . . # .
-            # # # # #
-            . . . # .
-            . . # . .
-            `);
+    if (typeof input !== "undefined") {
+        (input as any).onButtonPressed(1 /* Button.A */, () => {
+            rotationMode = !rotationMode;
+            if (rotationMode && typeof basic !== "undefined" && (basic as any).showLeds) {
+                (basic as any).showLeds(`
+                . # # # .
+                # . . . #
+                # . . . #
+                # . . . #
+                . # # # .
+                `);
+            } else if (typeof basic !== "undefined" && (basic as any).showLeds) {
+                (basic as any).showLeds(`
+                . . # . .
+                . . . # .
+                # # # # #
+                . . . # .
+                . . # . .
+                `);
 
-        }
-    });
+            }
+        });
+    }
 
     while (true) {
-        let x = input.acceleration(Dimension.X) >> 1
-        let y = input.acceleration(Dimension.Y) >> 1
-        let z = input.acceleration(Dimension.Z) >> 1
+        let x = 0;
+        let y = 0;
+        let z = 0;
+        if (typeof input !== "undefined" && (input as any).acceleration) {
+            x = (input as any).acceleration(0 /* Dimension.X */) >> 1
+            y = (input as any).acceleration(1 /* Dimension.Y */) >> 1
+            z = (input as any).acceleration(2 /* Dimension.Z */) >> 1
+        }
         if (rotationMode) {
             strip.rotate();
         } else {

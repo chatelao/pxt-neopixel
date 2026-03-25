@@ -61,6 +61,7 @@ while (true) {
 
 * for PXT/microbit
 * for PXT/calliope
+* for PXT/maker (Raspberry Pi Pico)
 
 ## License
 
