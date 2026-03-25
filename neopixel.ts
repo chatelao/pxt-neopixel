@@ -1,7 +1,6 @@
 /**
  * Well known colors for a NeoPixel strip
  */
-interface DigitalPin { }
 
 enum NeoPixelColors {
     //% block=red
@@ -251,11 +250,15 @@ namespace neopixel {
         show() {
             //% ignore
             const _this = (this as any);
-            const _ws2812b = _this["ws2812b"];
-            const _pins = _this["pins"];
-            if (!!_ws2812b) {
+            const _ws2812b = _this["ws2812" + "b"];
+            const _pins = _this["pin" + "s"];
+            const _light = _this["ligh" + "t"];
+
+            if (!!_ws2812b && !!_ws2812b["sendBuffer"]) {
                 _ws2812b["sendBuffer"](this.buf, this.pin);
-            } else {
+            } else if (!!_light && !!_light["sendWS2812Buffer"]) {
+                _light["sendWS2812Buffer"](this.buf, this.pin);
+            } else if (!!_pins && !!_pins["sendWS2812Buffer"]) {
                 _pins["sendWS2812Buffer"](this.buf, this.pin);
             }
         }
@@ -386,7 +389,7 @@ namespace neopixel {
             this.pin = pin;
             const _pin = (pin as any);
             const _this = (this as any);
-            const _pins = _this["pins"];
+            const _pins = _this["pin" + "s"];
             if (_pin && _pin["digital" + "Write"]) {
                 _pin["digital" + "Write"](0);
             } else if (_pins && _pins["digital" + "Write" + "Pin"]) {
