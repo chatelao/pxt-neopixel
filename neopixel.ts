@@ -46,14 +46,17 @@ enum NeoPixelMode {
     RGB_RGB = 3
 }
 
+declare namespace pins { }
+
 /**
  * Functions to operate NeoPixel strips.
  */
-namespace ws2812b {
+declare namespace ws2812b {
     /**
-     * Support for DigitalPin when it's not defined by the target (e.g. maker)
+     * Sends a buffer of data to a NeoPixel strip.
      */
-    export interface DigitalPin { }
+    //% shim=ws2812b::sendBuffer
+    export function sendBuffer(buf: Buffer, pin: any): void;
 }
 
 //% weight=80 color=#2699BF icon="\uf110"
@@ -266,11 +269,11 @@ namespace neopixel {
         show() {
             //% ignore
             const _this = (this as any);
-            const _ws2812b = _this["ws281" + "2b"];
-            const _pins = _this["pin" + "s"];
-            if (!!_ws2812b) {
+            const _ws2812b = (ws2812b as any);
+            const _pins = (pins as any);
+            if (!!_ws2812b && !!_ws2812b["sendBuffer"]) {
                 _ws2812b["sendBuffer"](this.buf, this.pin);
-            } else if (!!_pins) {
+            } else if (!!_pins && !!_pins["sendWS2812Buffer"]) {
                 _pins["sendWS2812Buffer"](this.buf, this.pin);
             }
         }
@@ -400,7 +403,7 @@ namespace neopixel {
         setPin(pin: any): void {
             this.pin = pin;
             const _this = (this as any);
-            let p = _this["pin" + "s"];
+            let p = (pins as any);
             if (p && p["digitalWritePin"]) {
                 p["digitalWritePin"](this.pin, 0);
             } else if (this.pin && (this.pin as any).digitalWrite) {
@@ -624,9 +627,3 @@ namespace neopixel {
     }
 }
 
-namespace ws2812b {
-    /**
-     * DigitalPin interface to satisfy the compiler in targets where it is not defined.
-     */
-    export interface DigitalPin { }
-}
