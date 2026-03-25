@@ -23,7 +23,6 @@ async def run_e2e():
             await page.click("button:has-text('Create')")
 
             print("Step 4: Selecting board...")
-            # Clicks are sometimes intercepted by the modal. Using force=True.
             await page.locator(".card").first.click(force=True)
             print("Clicked board choice.")
 
@@ -33,7 +32,7 @@ async def run_e2e():
             print("Step 6: Opening Extensions...")
             ext_label = page.locator(".blocklyTreeLabel:has-text('Extensions')")
             if not await ext_label.is_visible():
-                print("Extensions label not visible, expanding Advanced...")
+                print("Expanding Advanced...")
                 await page.locator(".blocklyTreeLabel:has-text('Advanced')").click(force=True)
                 await asyncio.sleep(2)
 
@@ -43,43 +42,43 @@ async def run_e2e():
             print("Step 7: Adding chatelao/pxt-neopixel extension...")
             search_box = page.locator("input[placeholder*='Search']").last
             await search_box.wait_for(state="visible", timeout=30000)
-
-            # Use chatelao/neopixel repo.
             await search_box.fill("https://github.com/chatelao/pxt-neopixel")
             await page.keyboard.press("Enter")
 
             print("Waiting for extension card...")
             await asyncio.sleep(10)
-
-            # Based on previous successful runs, click by text works.
             try:
                 await page.click("text='neopixel'", force=True, timeout=30000)
                 print("Clicked neopixel extension card.")
             except:
-                print("Text click failed, trying generic card click...")
                 await page.locator(".ui.card").first.click(force=True)
 
-            print("Step 8: Verifying Neopixel category and adding test code...")
-            # Wait for editor to reload.
-            await asyncio.sleep(15)
+            print("Step 8: Injecting test code and switching to Blocks...")
+            await asyncio.sleep(15) # Wait for reload
 
-            # Try to switch to JavaScript and add code
-            try:
-                js_button = page.locator("button:has-text('JavaScript')")
-                if await js_button.is_visible():
-                    await js_button.click()
-                    print("Switched to JavaScript editor.")
-                    await asyncio.sleep(5)
+            # Switch to JavaScript editor
+            # The toggle is often a div with role="tab" or similar text
+            js_toggle = page.locator("a:has-text('JavaScript'), div:has-text('JavaScript'), button:has-text('JavaScript')").filter(has_not_text="Console").first
+            await js_toggle.wait_for(state="visible", timeout=30000)
+            await js_toggle.click()
+            print("Switched to JavaScript.")
+            await asyncio.sleep(5)
 
-                    # Inject minimal test code
-                    test_code = "let strip = neopixel.create(pins.P0, 24, NeoPixelMode.RGB);\nstrip.showColor(NeoPixelColors.Red);"
-                    await page.keyboard.press("Control+A")
-                    await page.keyboard.press("Backspace")
-                    await page.keyboard.type(test_code)
-                    print("Injected minimal test code.")
-                    await asyncio.sleep(5) # Give it time to compile/update
-            except Exception as code_err:
-                print(f"Failed to inject test code: {code_err}")
+            # Use keyboard to select all and replace with neopixel code
+            test_code = "let strip = neopixel.create(pins.P0, 24, NeoPixelMode.RGB);\nstrip.showColor(NeoPixelColors.Red);"
+            # Focus the editor - monaco editor
+            await page.click(".monaco-editor")
+            await page.keyboard.press("Control+A")
+            await page.keyboard.press("Backspace")
+            await page.keyboard.type(test_code)
+            print("Injected test code.")
+            await asyncio.sleep(2)
+
+            # Switch back to Blocks
+            blocks_toggle = page.locator("a:has-text('Blocks'), div:has-text('Blocks'), button:has-text('Blocks')").first
+            await blocks_toggle.click()
+            print("Switched back to Blocks.")
+            await asyncio.sleep(10) # Give it time to render blocks
 
             await page.screenshot(path="e2e_success.png")
             print("Step 9: E2E Test Completed. Screenshot saved as e2e_success.png")
