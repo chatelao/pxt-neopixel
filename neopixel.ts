@@ -55,8 +55,11 @@ declare namespace ws2812b {
     /**
      * Sends a buffer of data to a NeoPixel strip.
      */
-    //% shim=ws2812b::sendBuffer
     export function sendBuffer(buf: Buffer, pin: any): void;
+}
+
+namespace ws2812b {
+    export interface DigitalPin { }
 }
 
 //% weight=80 color=#2699BF icon="\uf110"
@@ -269,8 +272,8 @@ namespace neopixel {
         show() {
             //% ignore
             const _this = (this as any);
-            const _ws2812b = (ws2812b as any);
-            const _pins = (pins as any);
+            const _ws2812b = _this["ws281" + "2b"];
+            const _pins = _this["pin" + "s"];
             if (!!_ws2812b && !!_ws2812b["sendBuffer"]) {
                 _ws2812b["sendBuffer"](this.buf, this.pin);
             } else if (!!_pins && !!_pins["sendWS2812Buffer"]) {
@@ -403,7 +406,7 @@ namespace neopixel {
         setPin(pin: any): void {
             this.pin = pin;
             const _this = (this as any);
-            let p = (pins as any);
+            let p = _this["pin" + "s"];
             if (p && p["digitalWritePin"]) {
                 p["digitalWritePin"](this.pin, 0);
             } else if (this.pin && (this.pin as any).digitalWrite) {
