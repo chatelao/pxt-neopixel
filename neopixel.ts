@@ -1,4 +1,9 @@
 
+/**
+ * Support for targets with no DigitalPin
+ */
+declare interface DigitalPin { }
+
 //% shim=TD_ID
 //% blockId=digitalpin_shim
 //% block="DigitalPin"
@@ -258,9 +263,8 @@ namespace neopixel {
         //% parts="neopixel"
         show() {
             //% ignore
-            const _this = (this as any);
-            const _ws2812b = _this["ws281" + "2b"];
-            const _pins = _this["pin" + "s"];
+            const _ws2812b = (control as any)["ws281" + "2b"];
+            const _pins = (control as any)["pin" + "s"];
             if (!!_ws2812b) {
                 _ws2812b["sendBuffer"](this.buf, this.pin);
             } else if (!!_pins) {
@@ -392,8 +396,7 @@ namespace neopixel {
         //% parts="neopixel" advanced=true
         setPin(pin: any): void {
             this.pin = pin;
-            const _this = (this as any);
-            let p = _this["pin" + "s"];
+            let p = (control as any)["pin" + "s"];
             if (p && p.digitalWritePin) {
                 p.digitalWritePin(this.pin, 0);
             } else if (this.pin && (this.pin as any).digitalWrite) {
@@ -415,7 +418,7 @@ namespace neopixel {
             for (let i = this.start; i < end; ++i) {
                 const ledoffset = i * stride;
                 for (let j = 0; j < stride; ++j) {
-                    p += this.buf[i + j];
+                    p += this.buf[ledoffset + j];
                 }
             }
             return Math.idiv(this.length() * 7, 10) /* 0.7mA per neopixel */
