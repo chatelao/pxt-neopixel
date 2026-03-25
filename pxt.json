@@ -19,7 +19,8 @@
         "_locales/zh/neopixel-strings.json"
     ],
     "testFiles": [
-        "neotest.ts"
+        "neotest.ts",
+        "maker-test.ts"
     ],
     "public": true,
     "supportedTargets": [
