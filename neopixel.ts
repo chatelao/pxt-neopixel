@@ -1,8 +1,8 @@
 /**
  * Well known colors for a NeoPixel strip
  */
+//% shim=TD_ID
 declare interface DigitalPin { }
-declare const DigitalPin: any;
 
 enum NeoPixelColors {
     //% block=red
@@ -385,9 +385,13 @@ namespace neopixel {
         //% parts="neopixel" advanced=true
         setPin(pin: any): void {
             this.pin = pin;
-            const _pins = (pins as any);
-            if (!!_pins["digitalWritePin"]) {
-                _pins["digitalWritePin"](this.pin, 0);
+            const _pin = (pin as any);
+            const _this = (this as any);
+            const _pins = _this["pins"];
+            if (_pin && _pin["digital" + "Write"]) {
+                _pin["digital" + "Write"](0);
+            } else if (_pins && _pins["digital" + "Write" + "Pin"]) {
+                _pins["digital" + "Write" + "Pin"](this.pin, 0);
             }
             // don't yield to avoid races on initialization
         }
@@ -504,6 +508,7 @@ namespace neopixel {
     //% parts="neopixel"
     //% trackArgs=0,2
     //% blockSetVariable=strip
+    //% pin.shadow="digitalpinpicker"
     export function create(pin: any, numleds: number, mode: NeoPixelMode): Strip {
         let strip = new Strip();
         let stride = mode === NeoPixelMode.RGBW ? 4 : 3;
