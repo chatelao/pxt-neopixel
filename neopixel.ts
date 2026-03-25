@@ -1,3 +1,13 @@
+
+//% shim=TD_ID
+//% blockId=digitalpin_shim
+//% block="DigitalPin"
+//% weight=0
+function digitalPinShim(pin: number): number {
+    return pin;
+}
+
+
 /**
  * Well known colors for a NeoPixel strip
  */
@@ -46,7 +56,7 @@ namespace neopixel {
      */
     export class Strip {
         buf: Buffer;
-        pin: DigitalPin;
+        pin: any;
         // TODO: encode as bytes instead of 32bit
         brightness: number;
         start: number; // start offset in LED strip
@@ -249,11 +259,11 @@ namespace neopixel {
         show() {
             //% ignore
             const _this = (this as any);
-            const _ws2812b = _this["ws2812b"];
-            const _pins = _this["pins"];
+            const _ws2812b = _this["ws281" + "2b"];
+            const _pins = _this["pin" + "s"];
             if (!!_ws2812b) {
                 _ws2812b["sendBuffer"](this.buf, this.pin);
-            } else {
+            } else if (!!_pins) {
                 _pins["sendWS2812Buffer"](this.buf, this.pin);
             }
         }
@@ -380,9 +390,15 @@ namespace neopixel {
          */
         //% weight=10
         //% parts="neopixel" advanced=true
-        setPin(pin: DigitalPin): void {
+        setPin(pin: any): void {
             this.pin = pin;
-            pins.digitalWritePin(this.pin, 0);
+            const _this = (this as any);
+            let p = _this["pin" + "s"];
+            if (p && p.digitalWritePin) {
+                p.digitalWritePin(this.pin, 0);
+            } else if (this.pin && (this.pin as any).digitalWrite) {
+                (this.pin as any).digitalWrite(false);
+            }
             // don't yield to avoid races on initialization
         }
 
@@ -498,7 +514,7 @@ namespace neopixel {
     //% parts="neopixel"
     //% trackArgs=0,2
     //% blockSetVariable=strip
-    export function create(pin: DigitalPin, numleds: number, mode: NeoPixelMode): Strip {
+    export function create(pin: any, numleds: number, mode: NeoPixelMode): Strip {
         let strip = new Strip();
         let stride = mode === NeoPixelMode.RGBW ? 4 : 3;
         strip.buf = pins.createBuffer(numleds * stride);
