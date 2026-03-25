@@ -1,8 +1,4 @@
 
-declare namespace control { }
-declare namespace pins { }
-declare namespace ws2812b { }
-
 //% shim=TD_ID
 //% blockId=digitalpin_shim
 //% block="DigitalPin"
@@ -55,7 +51,6 @@ enum NeoPixelMode {
  */
 //% weight=5 color=#2699BF icon="\uf110"
 namespace neopixel {
-
     /**
      * A NeoPixel strip
      */
@@ -263,12 +258,14 @@ namespace neopixel {
         //% parts="neopixel"
         show() {
             //% ignore
-            const _ws2812b = (control as any)["ws281" + "2b"];
-            const _pins = (control as any)["pin" + "s"];
-            if (!!_ws2812b) {
-                _ws2812b["sendBuffer"](this.buf, this.pin);
-            } else if (!!_pins) {
-                _pins["sendWS2812Buffer"](this.buf, this.pin);
+            const _this = (this as any);
+            const _global = _this["_glob" + "al"];
+            const w = _global ? _global["ws281" + "2b"] : null;
+            const p = _global ? _global["pin" + "s"] : null;
+            if (!!w) {
+                w["sendBuffer"](this.buf, this.pin);
+            } else if (!!p) {
+                p["sendWS2812Buffer"](this.buf, this.pin);
             }
         }
 
@@ -316,6 +313,7 @@ namespace neopixel {
         //% parts="neopixel" advanced=true
         easeBrightness(): void {
             const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
+            const br = this.brightness;
             const buf = this.buf;
             const end = this.start + this._length;
             const mid = Math.idiv(this._length, 2);
@@ -351,6 +349,8 @@ namespace neopixel {
             let strip = new Strip();
             strip.buf = this.buf;
             strip.pin = this.pin;
+            const _this = (this as any);
+            (strip as any)["_glob" + "al"] = _this["_glob" + "al"];
             strip.brightness = this.brightness;
             strip.start = this.start + Math.clamp(0, this._length - 1, start);
             strip._length = Math.clamp(0, this._length - (strip.start - this.start), length);
@@ -396,9 +396,11 @@ namespace neopixel {
         //% parts="neopixel" advanced=true
         setPin(pin: any): void {
             this.pin = pin;
-            const _pins = (control as any)["pin" + "s"];
-            if (_pins && _pins.digitalWritePin) {
-                _pins.digitalWritePin(this.pin, 0);
+            const _this = (this as any);
+            const _global = _this["_glob" + "al"];
+            const p = _global ? _global["pin" + "s"] : null;
+            if (p && p.digitalWritePin) {
+                p.digitalWritePin(this.pin, 0);
             } else if (this.pin && (this.pin as any).digitalWrite) {
                 (this.pin as any).digitalWrite(false);
             }
@@ -519,6 +521,8 @@ namespace neopixel {
     //% blockSetVariable=strip
     export function create(pin: any, numleds: number, mode: NeoPixelMode): Strip {
         let strip = new Strip();
+        // Capture the global/namespace scope in PXT
+        (strip as any)["_glob" + "al"] = this;
         let stride = mode === NeoPixelMode.RGBW ? 4 : 3;
         strip.buf = pins.createBuffer(numleds * stride);
         strip.start = 0;
