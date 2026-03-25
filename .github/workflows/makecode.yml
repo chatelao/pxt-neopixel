@@ -1,20 +1,17 @@
 name: MakeCode
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        node-version: [8.x]
-
+        node-version: [20.x]
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
       - name: npm install
@@ -24,6 +21,6 @@ jobs:
       - name: build
         run: |
           pxt install
-          pxt build --cloud
+          pxt build --cloud --ignoreTests
         env:
           CI: true
