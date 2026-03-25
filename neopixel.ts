@@ -397,7 +397,7 @@ namespace neopixel {
          */
         //% weight=10
         //% parts="neopixel" advanced=true
-        setPin(pin: any): void {
+        setPin(pin: DigitalPin): void {
             this.pin = pin;
             const _this = (this as any);
             let p = _this["pin" + "s"];
@@ -522,7 +522,8 @@ namespace neopixel {
     //% parts="neopixel"
     //% trackArgs=0,2
     //% blockSetVariable=strip
-    export function create(pin: any, numleds: number, mode: NeoPixelMode): Strip {
+    //% pin.shadow="digitalpin_shim"
+    export function create(pin: DigitalPin, numleds: number, mode: NeoPixelMode): Strip {
         let strip = new Strip();
         let stride = mode === NeoPixelMode.RGBW ? 4 : 3;
         strip.buf = pins.createBuffer(numleds * stride);
