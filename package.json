@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "pxt-calliope": "^3.0.30",
+    "pxt-maker": "^0.15.70",
     "pxt-microbit": "^8.1.9"
   }
 }
