@@ -25,7 +25,8 @@
     "public": true,
     "supportedTargets": [
         "microbit",
-        "maker"
+        "maker",
+        "calliope"
     ],
     "preferredEditor": "tsprj",
     "yotta": {
