@@ -24,7 +24,7 @@
   "neopixel.Strip.range|block": "%strip|の%start|番目から%length|個のNeoPixel",
   "neopixel.Strip.shift|block": "%strip|に設定されている色をLED%offset|個分ずらす",
   "neopixel.Strip.rotate|block": "%strip|に設定されている色をLED%offset|個分ずらす（ひとまわり）",
-  "neopixel.create|block": "端子%pin|に接続しているLED|%numleds|個のNeoPixel（モード%mode|）",
+  "neopixel.create|block": "端子%pin|に接続しているLED|%numleds|個のNeoPixel || （モード%mode|）",
   "neopixel.rgb|block": "RGB（赤%red|緑%green|青%blue|）",
   "neopixel.colors|block": "%color",
   "neopixel.HSL.rotateHue|block": "HSL%hsl|の色相を%offset|ずらす",

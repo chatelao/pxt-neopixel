@@ -29,7 +29,7 @@
   "neopixel.Strip.showRainbow|block": "afficher arc-en-ciel sur %strip|de %startHue|à %endHue",
   "neopixel.Strip.show|block": "montrer %strip|",
   "neopixel.colors|block": "%color",
-  "neopixel.create|block": "NeoPixel sur broche %pin|avec %numleds|DELs en %mode",
+  "neopixel.create|block": "NeoPixel sur broche %pin|avec %numleds|DELs || en %mode",
   "neopixel.hsl|block": "teinte %h|saturation %s|luminosité %l",
   "neopixel.rgb|block": "R %red|G %green|B %blue",
   "neopixel|block": "neopixel",

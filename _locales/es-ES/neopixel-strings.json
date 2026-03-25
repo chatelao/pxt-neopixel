@@ -29,7 +29,7 @@
   "neopixel.Strip.showRainbow|block": "mostrar arcoiris en %strip|desde %startHue|hasta %endHue",
   "neopixel.Strip.show|block": "mostrar %strip|",
   "neopixel.colors|block": "%color",
-  "neopixel.create|block": "NeoPixel en pin %pin|con %numleds|LEDs en %mode",
+  "neopixel.create|block": "NeoPixel en pin %pin|con %numleds|LEDs || en %mode",
   "neopixel.hsl|block": "matiz %h|saturación %s|luminosidad %l",
   "neopixel.rgb|block": "R(rojo) %red|G(verde) %green|B(azul) %blue",
   "neopixel|block": "neopixel",
