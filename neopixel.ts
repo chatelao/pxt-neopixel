@@ -1,8 +1,7 @@
 /**
  * Well known colors for a NeoPixel strip
  */
-//% shim=TD_ID
-declare interface DigitalPin { }
+interface DigitalPin { }
 
 enum NeoPixelColors {
     //% block=red
