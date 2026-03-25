@@ -1,10 +1,3 @@
-//% shim=TD_ID
-//% blockId=digitalpin_shim
-//% block="DigitalPin"
-//% weight=0
-function digitalPinShim(pin: any): number {
-    return pin;
-}
 
 
 
@@ -54,6 +47,16 @@ namespace ws2812b {
      * Support for DigitalPin when it's not defined by the target (e.g. maker)
      */
     export interface DigitalPin { }
+}
+
+
+
+//% shim=TD_ID
+//% blockId=digitalpin_shim
+//% block="DigitalPin"
+//% weight=0
+function digitalPinShim(pin: any): number {
+    return pin;
 }
 
 //% weight=80 color=#2699BF icon="\uf110"
