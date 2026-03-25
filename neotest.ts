@@ -33,6 +33,18 @@
     sub.showBarGraph(5, 10);
     basic.pause(200);
 
+    strip.setMatrixWidth(8);
+    strip.setMatrixColor(0, 0, NeoPixelColors.Red);
+    strip.setMatrixColor(1, 1, NeoPixelColors.Green);
+    strip.show();
+    basic.pause(200);
+
+    strip.easeBrightness();
+    strip.show();
+    basic.pause(200);
+
+    let p = strip.power();
+
     let br = 100;
     strip.setBrightness(100);
     if (typeof input !== "undefined") {

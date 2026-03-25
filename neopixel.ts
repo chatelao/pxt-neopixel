@@ -248,8 +248,7 @@ namespace neopixel {
         //% parts="neopixel"
         show() {
             //% ignore
-            const ws2812b = (control as any).ws2812b;
-            if (ws2812b) {
+            if (typeof ws2812b !== "undefined") {
                 ws2812b.sendBuffer(this.buf, this.pin);
             } else {
                 (pins as any).sendWS2812Buffer(this.buf, this.pin);
