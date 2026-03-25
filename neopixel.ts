@@ -39,7 +39,7 @@ enum NeoPixelMode {
 /**
  * Functions to operate NeoPixel strips.
  */
-//% weight=5 color=#2699BF icon="\uf110"
+//% weight=80 color=#2699BF icon="\uf110"
 namespace neopixel {
     /**
      * A NeoPixel strip
@@ -492,6 +492,7 @@ namespace neopixel {
      * Create a new NeoPixel driver for `numleds` LEDs.
      * @param pin the pin where the neopixel is connected.
      * @param numleds number of leds in the strip, eg: 24,30,60,64
+     * @param mode the color format for the NeoPixel strip, eg: NeoPixelMode.RGB
      */
     //% blockId="neopixel_create" block="NeoPixel at pin %pin|with %numleds|leds as %mode"
     //% weight=90 blockGap=8
