@@ -5,8 +5,9 @@ from playwright.async_api import async_playwright
 
 async def run_e2e():
     async with async_playwright() as p:
+        # Using a larger viewport to ensure all UI elements are visible
         browser = await p.chromium.launch(headless=True)
-        context = await browser.new_context(viewport={'width': 1280, 'height': 800})
+        context = await browser.new_context(viewport={'width': 1920, 'height': 1080})
         page = await context.new_page()
 
         try:
@@ -23,8 +24,15 @@ async def run_e2e():
             await page.click("button:has-text('Create')")
 
             print("Step 4: Selecting board...")
-            await page.locator(".card").first.click(force=True)
-            print("Clicked board choice.")
+            # Try to select Adafruit Circuit Playground Express specifically for consistent block availability
+            try:
+                board_card = page.locator(".card:has-text('Adafruit Circuit Playground Express')").first
+                await board_card.wait_for(state="visible", timeout=15000)
+                await board_card.click(force=True)
+                print("Selected Adafruit Circuit Playground Express.")
+            except:
+                print("Adafruit board not found, selecting first available board.")
+                await page.locator(".card").first.click(force=True)
 
             print("Step 5: Waiting for editor to load...")
             await page.wait_for_selector(".blocklyTreeRow", timeout=60000)
@@ -46,42 +54,51 @@ async def run_e2e():
             await page.keyboard.press("Enter")
 
             print("Waiting for extension card...")
-            await asyncio.sleep(10)
+            # Increased wait for search results
+            await asyncio.sleep(12)
             try:
+                # Based on previous runs, clicking by text is reliable once found
                 await page.click("text='neopixel'", force=True, timeout=30000)
                 print("Clicked neopixel extension card.")
             except:
+                print("Text click failed, trying generic card click...")
                 await page.locator(".ui.card").first.click(force=True)
 
-            print("Step 8: Injecting test code and switching to Blocks...")
-            await asyncio.sleep(15) # Wait for reload
+            print("Step 8: Injecting test code...")
+            await asyncio.sleep(20) # Long wait for project reload after extension addition
 
-            # Switch to JavaScript editor
-            # The toggle is often a div with role="tab" or similar text
-            js_toggle = page.locator("a:has-text('JavaScript'), div:has-text('JavaScript'), button:has-text('JavaScript')").filter(has_not_text="Console").first
+            # Use a more reliable way to find the JS toggle
+            # In PXT, it's often a button with id="javascriptEditorMenuItem" or similar
+            # Or just look for the text in the main header
+            js_toggle = page.locator("button:has-text('JavaScript'), a:has-text('JavaScript')").first
             await js_toggle.wait_for(state="visible", timeout=30000)
             await js_toggle.click()
-            print("Switched to JavaScript.")
-            await asyncio.sleep(5)
+            print("Switched to JavaScript editor.")
+            await asyncio.sleep(8)
 
-            # Use keyboard to select all and replace with neopixel code
-            test_code = "let strip = neopixel.create(pins.P0, 24, NeoPixelMode.RGB);\nstrip.showColor(NeoPixelColors.Red);"
-            # Focus the editor - monaco editor
+            # Select all and delete current code
             await page.click(".monaco-editor")
             await page.keyboard.press("Control+A")
             await page.keyboard.press("Backspace")
+
+            # Inject code that translates clearly to blocks in 'on start'
+            # pins.P0 is standard for many maker boards
+            test_code = """let strip = neopixel.create(pins.P0, 24, NeoPixelMode.RGB)
+strip.setPixelColor(0, NeoPixelColors.Red)
+"""
             await page.keyboard.type(test_code)
             print("Injected test code.")
-            await asyncio.sleep(2)
+            await asyncio.sleep(5)
 
-            # Switch back to Blocks
-            blocks_toggle = page.locator("a:has-text('Blocks'), div:has-text('Blocks'), button:has-text('Blocks')").first
+            print("Step 9: Switching back to Blocks view...")
+            blocks_toggle = page.locator("button:has-text('Blocks'), a:has-text('Blocks')").first
             await blocks_toggle.click()
-            print("Switched back to Blocks.")
-            await asyncio.sleep(10) # Give it time to render blocks
+            print("Switched to Blocks.")
+            await asyncio.sleep(15) # Wait for blocks to render
 
+            # Final screenshot
             await page.screenshot(path="e2e_success.png")
-            print("Step 9: E2E Test Completed. Screenshot saved as e2e_success.png")
+            print("Step 10: E2E Test Completed. Screenshot saved as e2e_success.png")
 
         except Exception as e:
             print(f"E2E Test Failed: {e}")
