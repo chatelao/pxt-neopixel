@@ -1,14 +1,8 @@
-
-/**
- * Support for pins that are not available in all targets
- */
-declare interface DigitalPin { }
-
 //% shim=TD_ID
 //% blockId=digitalpin_shim
 //% block="DigitalPin"
 //% weight=0
-function digitalPinShim(pin: number): number {
+function digitalPinShim(pin: any): number {
     return pin;
 }
 
