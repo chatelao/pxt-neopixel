@@ -9,39 +9,39 @@
     for (let i = 0; i <= strip.length(); i++) { 
         strip.rotate();
         strip.show();
-        basic.pause(100)
+        pause(100)
     }
     
     strip.showColor(NeoPixelColors.Red)
-    basic.pause(2000)
+    pause(2000)
     strip.showColor(NeoPixelColors.Green)
-    basic.pause(1000)
+    pause(1000)
     for (let i = 0; i <= strip.length(); i++) {
         strip.setPixelColor(i, neopixel.colors(NeoPixelColors.Blue))
         strip.show()
-        basic.pause(100)
+        pause(100)
     }
     for (let i = 0; i <= strip.length(); i++) {
         strip.setPixelColor(i, neopixel.colors(NeoPixelColors.Green))
         strip.show()
-        basic.pause(100)
+        pause(100)
     }
     let sub = strip.range(10, 20)
     sub.showColor(NeoPixelColors.Yellow);
-    basic.pause(200);
+    pause(200);
 
     sub.showBarGraph(5, 10);
-    basic.pause(200);
+    pause(200);
 
     strip.setMatrixWidth(8);
     strip.setMatrixColor(0, 0, NeoPixelColors.Red);
     strip.setMatrixColor(1, 1, NeoPixelColors.Green);
     strip.show();
-    basic.pause(200);
+    pause(200);
 
     strip.easeBrightness();
     strip.show();
-    basic.pause(200);
+    pause(200);
 
     let p = strip.power();
 
@@ -101,6 +101,6 @@
             strip.shift(1);
         }
         strip.show();
-        basic.pause(100);
+        pause(100);
     }
 }
