@@ -1,6 +1,9 @@
 /**
  * Well known colors for a NeoPixel strip
  */
+declare interface DigitalPin { }
+declare const DigitalPin: any;
+
 enum NeoPixelColors {
     //% block=red
     Red = 0xFF0000,
@@ -46,7 +49,7 @@ namespace neopixel {
      */
     export class Strip {
         buf: Buffer;
-        pin: DigitalPin;
+        pin: any;
         // TODO: encode as bytes instead of 32bit
         brightness: number;
         start: number; // start offset in LED strip
@@ -380,9 +383,12 @@ namespace neopixel {
          */
         //% weight=10
         //% parts="neopixel" advanced=true
-        setPin(pin: DigitalPin): void {
+        setPin(pin: any): void {
             this.pin = pin;
-            pins.digitalWritePin(this.pin, 0);
+            const _pins = (pins as any);
+            if (!!_pins["digitalWritePin"]) {
+                _pins["digitalWritePin"](this.pin, 0);
+            }
             // don't yield to avoid races on initialization
         }
 
@@ -498,7 +504,7 @@ namespace neopixel {
     //% parts="neopixel"
     //% trackArgs=0,2
     //% blockSetVariable=strip
-    export function create(pin: DigitalPin, numleds: number, mode: NeoPixelMode): Strip {
+    export function create(pin: any, numleds: number, mode: NeoPixelMode): Strip {
         let strip = new Strip();
         let stride = mode === NeoPixelMode.RGBW ? 4 : 3;
         strip.buf = pins.createBuffer(numleds * stride);
