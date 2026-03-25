@@ -248,10 +248,13 @@ namespace neopixel {
         //% parts="neopixel"
         show() {
             //% ignore
-            if (typeof ws2812b !== "undefined") {
-                ws2812b.sendBuffer(this.buf, this.pin);
+            const _this = (this as any);
+            const _ws2812b = _this["ws2812b"];
+            const _pins = _this["pins"];
+            if (!!_ws2812b) {
+                _ws2812b["sendBuffer"](this.buf, this.pin);
             } else {
-                (pins as any).sendWS2812Buffer(this.buf, this.pin);
+                _pins["sendWS2812Buffer"](this.buf, this.pin);
             }
         }
 

@@ -47,8 +47,10 @@
 
     let br = 100;
     strip.setBrightness(100);
-    if (typeof input !== "undefined") {
-        (input as any).onButtonPressed(2 /* Button.B */, () => {
+    const _this = (strip as any);
+    const _input = _this["input"];
+    if (_input) {
+        _input.onButtonPressed(2 /* Button.B */, () => {
             br = br + 20;
             if (br > 255) {
                 br = 5;
@@ -58,19 +60,20 @@
     }
 
     let rotationMode = false;
-    if (typeof input !== "undefined") {
-        (input as any).onButtonPressed(1 /* Button.A */, () => {
+    if (_input) {
+        _input.onButtonPressed(1 /* Button.A */, () => {
             rotationMode = !rotationMode;
-            if (rotationMode && typeof basic !== "undefined" && (basic as any).showLeds) {
-                (basic as any).showLeds(`
+            const _basic = _this["basic"];
+            if (rotationMode && _basic && _basic.showLeds) {
+                _basic.showLeds(`
                 . # # # .
                 # . . . #
                 # . . . #
                 # . . . #
                 . # # # .
                 `);
-            } else if (typeof basic !== "undefined" && (basic as any).showLeds) {
-                (basic as any).showLeds(`
+            } else if (_basic && _basic.showLeds) {
+                _basic.showLeds(`
                 . . # . .
                 . . . # .
                 # # # # #
@@ -86,10 +89,10 @@
         let x = 0;
         let y = 0;
         let z = 0;
-        if (typeof input !== "undefined" && (input as any).acceleration) {
-            x = (input as any).acceleration(0 /* Dimension.X */) >> 1
-            y = (input as any).acceleration(1 /* Dimension.Y */) >> 1
-            z = (input as any).acceleration(2 /* Dimension.Z */) >> 1
+        if (_input && _input.acceleration) {
+            x = _input.acceleration(0 /* Dimension.X */) >> 1
+            y = _input.acceleration(1 /* Dimension.Y */) >> 1
+            z = _input.acceleration(2 /* Dimension.Z */) >> 1
         }
         if (rotationMode) {
             strip.rotate();
