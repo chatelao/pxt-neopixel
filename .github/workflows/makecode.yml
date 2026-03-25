@@ -21,6 +21,6 @@ jobs:
       - name: build
         run: |
           pxt install
-          pxt build --cloud --ignoreTests
+          pxt build --cloud
         env:
           CI: true
