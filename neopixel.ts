@@ -7,6 +7,7 @@ function digitalPinShim(pin: any): number {
 }
 
 
+
 /**
  * Well known colors for a NeoPixel strip
  */
@@ -48,6 +49,13 @@ enum NeoPixelMode {
 /**
  * Functions to operate NeoPixel strips.
  */
+namespace ws2812b {
+    /**
+     * Support for DigitalPin when it's not defined by the target (e.g. maker)
+     */
+    export interface DigitalPin { }
+}
+
 //% weight=80 color=#2699BF icon="\uf110"
 namespace neopixel {
     /**
