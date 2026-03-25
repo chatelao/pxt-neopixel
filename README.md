@@ -57,6 +57,21 @@ while (true) {
 }
 ```
 
+## Example: 16x16 matrix at Raspberry Pi Pico
+
+This example creates a 16x16 matrix (256 LEDs) on `P0` and fills it with a gradient.
+
+```blocks
+let strip = neopixel.create(DigitalPin.P0, 256, NeoPixelMode.RGB);
+strip.setMatrixWidth(16);
+for (let x = 0; x < 16; x++) {
+    for (let y = 0; y < 16; y++) {
+        strip.setMatrixColor(x, y, neopixel.rgb(x * 16, y * 16, 0));
+    }
+}
+strip.show();
+```
+
 ## Supported targets
 
 * for PXT/microbit
