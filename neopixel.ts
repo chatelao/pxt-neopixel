@@ -1,8 +1,7 @@
 
-/**
- * Support for targets with no DigitalPin
- */
-declare interface DigitalPin { }
+declare namespace control { }
+declare namespace pins { }
+declare namespace ws2812b { }
 
 //% shim=TD_ID
 //% blockId=digitalpin_shim
@@ -56,6 +55,7 @@ enum NeoPixelMode {
  */
 //% weight=5 color=#2699BF icon="\uf110"
 namespace neopixel {
+
     /**
      * A NeoPixel strip
      */
@@ -316,10 +316,10 @@ namespace neopixel {
         //% parts="neopixel" advanced=true
         easeBrightness(): void {
             const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
-            const br = this.brightness;
             const buf = this.buf;
             const end = this.start + this._length;
             const mid = Math.idiv(this._length, 2);
+            if (mid == 0) return;
             for (let i = this.start; i < end; ++i) {
                 const k = i - this.start;
                 const ledoffset = i * stride;
@@ -396,9 +396,9 @@ namespace neopixel {
         //% parts="neopixel" advanced=true
         setPin(pin: any): void {
             this.pin = pin;
-            let p = (control as any)["pin" + "s"];
-            if (p && p.digitalWritePin) {
-                p.digitalWritePin(this.pin, 0);
+            const _pins = (control as any)["pin" + "s"];
+            if (_pins && _pins.digitalWritePin) {
+                _pins.digitalWritePin(this.pin, 0);
             } else if (this.pin && (this.pin as any).digitalWrite) {
                 (this.pin as any).digitalWrite(false);
             }
