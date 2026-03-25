@@ -1,9 +1,8 @@
-
 //% shim=TD_ID
 //% blockId=digitalpin_shim
 //% block="DigitalPin"
 //% weight=0
-function digitalPinShim(pin: number): number {
+function digitalPinShim(pin: any): number {
     return pin;
 }
 
@@ -394,8 +393,8 @@ namespace neopixel {
             this.pin = pin;
             const _this = (this as any);
             let p = _this["pin" + "s"];
-            if (p && p.digitalWritePin) {
-                p.digitalWritePin(this.pin, 0);
+            if (p && p["digitalWritePin"]) {
+                p["digitalWritePin"](this.pin, 0);
             } else if (this.pin && (this.pin as any).digitalWrite) {
                 (this.pin as any).digitalWrite(false);
             }

@@ -17,7 +17,7 @@ See [Microsoft/pxt-ws2812b](https://makecode.microbit.org/pkg/microsoft/pxt-ws28
 ```blocks
 // Create a NeoPixel driver - specify the pin, number of LEDs, and the type of 
 // the NeoPixel srip, either standard RGB (with GRB or RGB format) or RGB+White.
-let strip = neopixel.create(DigitalPin.P0, 24, NeoPixelMode.RGB);
+let strip = neopixel.create(1, 24, NeoPixelMode.RGB);
 
 // set pixel colors
 strip.setPixelColor(0, NeoPixelColors.White); // white
@@ -45,7 +45,7 @@ This little program will let the position of the microbit control the color of t
 This first LED will then get shifted further away every 100ms.
 
 ```blocks
-let strip = neopixel.create(DigitalPin.P0, 24, NeoPixelMode.RGB_RGB)
+let strip = neopixel.create(1, 24, NeoPixelMode.RGB_RGB)
 while (true) {
     let x = input.acceleration(Dimension.X) / 2;
     let y = input.acceleration(Dimension.Y) / 2;
@@ -59,10 +59,10 @@ while (true) {
 
 ## Example: 16x16 matrix at Raspberry Pi Pico
 
-This example creates a 16x16 matrix (256 LEDs) on `P0` and fills it with a gradient.
+This example creates a 16x16 matrix (256 LEDs) on `1` and fills it with a gradient.
 
 ```blocks
-let strip = neopixel.create(DigitalPin.P0, 256, NeoPixelMode.RGB);
+let strip = neopixel.create(1, 256, NeoPixelMode.RGB);
 strip.setMatrixWidth(16);
 for (let x = 0; x < 16; x++) {
     for (let y = 0; y < 16; y++) {
