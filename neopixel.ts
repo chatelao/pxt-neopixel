@@ -1,4 +1,9 @@
 
+/**
+ * Support for DigitalPin when it's not defined by the target (e.g. maker)
+ */
+declare interface DigitalPin { }
+
 //% shim=TD_ID
 //% blockId=digitalpin_shim
 //% block="DigitalPin"
