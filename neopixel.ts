@@ -615,3 +615,10 @@ namespace neopixel {
         Shortest
     }
 }
+
+namespace ws2812b {
+    /**
+     * DigitalPin interface to satisfy the compiler in targets where it is not defined.
+     */
+    export interface DigitalPin { }
+}
