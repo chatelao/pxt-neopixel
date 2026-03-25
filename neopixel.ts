@@ -1,4 +1,9 @@
 
+/**
+ * Support for pins that are not available in all targets
+ */
+declare interface DigitalPin { }
+
 //% shim=TD_ID
 //% blockId=digitalpin_shim
 //% block="DigitalPin"
@@ -394,8 +399,8 @@ namespace neopixel {
             this.pin = pin;
             const _this = (this as any);
             let p = _this["pin" + "s"];
-            if (p && p.digitalWritePin) {
-                p.digitalWritePin(this.pin, 0);
+            if (p && p["digitalWritePin"]) {
+                p["digitalWritePin"](this.pin, 0);
             } else if (this.pin && (this.pin as any).digitalWrite) {
                 (this.pin as any).digitalWrite(false);
             }
