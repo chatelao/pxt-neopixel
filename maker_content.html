@@ -1,0 +1,1760 @@
+<!DOCTYPE html><html lang="en" manifest="/---manifest" data-framework="typescript"><head><style id="blockly-renderer-style-pxt-classic">.pxt-renderer.classic-theme .blocklyText,
+.pxt-renderer.classic-theme .blocklyFlyoutLabelText {
+font: 600 12pt "Consolas", "Monaco", "Menlo", "Ubuntu Mono", "source-code-pro", monospace;
+}
+.pxt-renderer.classic-theme .blocklyTextInputBubble textarea {
+font-weight: normal;
+}
+.pxt-renderer.classic-theme .blocklyText {
+fill: #fff;
+}
+.pxt-renderer.classic-theme .blocklyNonEditableField>rect:not(.blocklyDropdownRect),
+.pxt-renderer.classic-theme .blocklyEditableField>rect:not(.blocklyDropdownRect) {
+fill: #fff;
+}
+.pxt-renderer.classic-theme .blocklyNonEditableField>text,
+.pxt-renderer.classic-theme .blocklyEditableField>text,
+.pxt-renderer.classic-theme .blocklyNonEditableField>g>text,
+.pxt-renderer.classic-theme .blocklyEditableField>g>text {
+fill: #575E75;
+}
+.pxt-renderer.classic-theme .blocklyFlyoutLabelText {
+fill: #575E75;
+}
+.pxt-renderer.classic-theme .blocklyText.blocklyBubbleText {
+fill: #575E75;
+}
+.pxt-renderer.classic-theme .blocklyDraggable:not(.blocklyDisabled)
+ .blocklyEditableField:not(.blocklyEditing):hover>rect,
+.pxt-renderer.classic-theme .blocklyDraggable:not(.blocklyDisabled)
+ .blocklyEditableField:not(.blocklyEditing):hover>.blocklyPath {
+stroke: #fff;
+stroke-width: 2;
+}
+.pxt-renderer.classic-theme .blocklyHtmlInput {
+font-family: "Consolas", "Monaco", "Menlo", "Ubuntu Mono", "source-code-pro", monospace;
+font-weight: 600;
+color: #575E75;
+}
+.pxt-renderer.classic-theme .blocklyDropdownText {
+fill: #fff !important;
+}
+.pxt-renderer.classic-theme.blocklyWidgetDiv .blocklyMenuItem,
+.pxt-renderer.classic-theme.blocklyDropDownDiv .blocklyMenuItem {
+font-family: "Consolas", "Monaco", "Menlo", "Ubuntu Mono", "source-code-pro", monospace;
+}
+.pxt-renderer.classic-theme.blocklyDropDownDiv .blocklyMenuItemContent {
+color: #fff;
+}
+.pxt-renderer.classic-theme .blocklyHighlightedConnectionPath {
+stroke: #fff200;
+}
+.pxt-renderer.classic-theme .blocklyDisabledPattern > .blocklyOutlinePath {
+fill: var(--blocklyDisabledPattern)
+}
+.pxt-renderer.classic-theme .blocklyInsertionMarker>.blocklyPath {
+fill-opacity: 0.2;
+stroke: none;
+}
+.pxt-renderer.classic-theme .blocklySelected>.blocklyPath.blocklyPathSelected {
+fill: none;
+filter: var(--blocklySelectedGlowFilter);
+}
+.pxt-renderer.classic-theme .blocklyReplaceable>.blocklyPath {
+filter: var(--blocklyReplacementGlowFilter);
+}
+.pxt-renderer.classic-theme .blocklyConnectionIndicator, .pxt-renderer.classic-theme .blocklyInputConnectionIndicator {
+fill: #ff0000;
+stroke: #ffff00;
+stroke-width: 3px;
+}
+.pxt-renderer.classic-theme .blocklyConnectionIndicator {
+display: none;
+}
+.pxt-renderer.classic-theme .blocklyBlockDragSurface > g > .blocklyDraggable > .blocklyConnectionIndicator {
+display: block;
+}
+.pxt-renderer.classic-theme .blocklyConnectionLine {
+stroke: #ffff00;
+stroke-width: 4px;
+}
+.pxt-renderer.classic-theme .blocklyConnectionLine.hidden {
+display: none;
+}
+.pxt-renderer.classic-theme .blocklyFlyoutHeading .blocklyFlyoutLabelText {font-size: 1.5rem;
+}
+.pxt-renderer.classic-theme .blocklyText::selection {
+fill: #fff;
+}
+.pxt-renderer.classic-theme .blocklyNonEditableField>text::selection,
+.pxt-renderer.classic-theme .blocklyEditableField>text::selection,
+.pxt-renderer.classic-theme .blocklyNonEditableField>g>text::selection,
+.pxt-renderer.classic-theme .blocklyEditableField>g>text::selection {
+fill: #575E75;
+}
+.pxt-renderer.classic-theme .blocklyDropdownText::selection {
+fill: #fff !important;
+}</style><style id="blockly-common-style">
+.blocklySvg {
+  background-color: #fff;
+  outline: none;
+  overflow: hidden;  /* IE overflows by default. */
+  position: absolute;
+  display: block;
+}
+
+.blocklyWidgetDiv {
+  display: none;
+  position: absolute;
+  z-index: 99999;  /* big value for bootstrap3 compatibility */
+}
+
+.injectionDiv {
+  height: 100%;
+  position: relative;
+  overflow: hidden;  /* So blocks in drag surface disappear at edges */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.blocklyBlockCanvas.blocklyCanvasTransitioning,
+.blocklyBubbleCanvas.blocklyCanvasTransitioning {
+  transition: transform .5s;
+}
+
+.blocklyEmboss {
+  filter: var(--blocklyEmbossFilter);
+}
+
+.blocklyTooltipDiv {
+  background-color: #ffffc7;
+  border: 1px solid #ddc;
+  box-shadow: 4px 4px 20px 1px rgba(0,0,0,.15);
+  color: #000;
+  display: none;
+  font: 9pt sans-serif;
+  opacity: .9;
+  padding: 2px;
+  position: absolute;
+  z-index: 100000;  /* big value for bootstrap3 compatibility */
+}
+
+.blocklyDropDownDiv {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  display: none;
+  border: 1px solid;
+  border-color: #dadce0;
+  background-color: #fff;
+  border-radius: 2px;
+  padding: 4px;
+  box-shadow: 0 0 3px 1px rgba(0,0,0,.3);
+}
+
+.blocklyDropDownDiv:focus {
+  box-shadow: 0 0 6px 1px rgba(0,0,0,.3);
+}
+
+.blocklyDropDownContent {
+  max-height: 300px;  /* @todo: spec for maximum height. */
+}
+
+.blocklyDropDownArrow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  z-index: -1;
+  background-color: inherit;
+  border-color: inherit;
+  border-top: 1px solid;
+  border-left: 1px solid;
+  border-top-left-radius: 4px;
+  border-color: inherit;
+}
+
+.blocklyHighlighted>.blocklyPath {
+  filter: var(--blocklyEmbossFilter);
+}
+
+.blocklyHighlightedConnectionPath {
+  fill: none;
+  stroke: #fc3;
+  stroke-width: 4px;
+}
+
+.blocklyPathLight {
+  fill: none;
+  stroke-linecap: round;
+  stroke-width: 1;
+}
+
+.blocklySelected>.blocklyPathLight {
+  display: none;
+}
+
+.blocklyDraggable {
+  cursor: grab;
+  cursor: -webkit-grab;
+}
+
+.blocklyDragging {
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+  /* Drag surface disables events to not block the toolbox, so we have to
+   * reenable them here for the cursor values to work. */
+  pointer-events: auto;
+}
+
+  /* Changes cursor on mouse down. Not effective in Firefox because of
+     https://bugzilla.mozilla.org/show_bug.cgi?id=771241 */
+.blocklyDraggable:active {
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+}
+
+.blocklyDragging.blocklyDraggingDelete {
+  cursor: url("https://cdn.makecode.com/commit/b95bfc950d7f6bc68654e7ae095d238215830162/blockly/media/handdelete.cur"), auto;
+}
+
+.blocklyDragging>.blocklyPath,
+.blocklyDragging>.blocklyPathLight {
+  fill-opacity: .8;
+  stroke-opacity: .8;
+}
+
+.blocklyDragging>.blocklyPathDark {
+  display: none;
+}
+
+.blocklyDisabledPattern>.blocklyPath {
+  fill: var(--blocklyDisabledPattern);
+  fill-opacity: .5;
+  stroke-opacity: .5;
+}
+
+.blocklyDisabled>.blocklyPathLight,
+.blocklyDisabled>.blocklyPathDark {
+  display: none;
+}
+
+.blocklyInsertionMarker>.blocklyPath,
+.blocklyInsertionMarker>.blocklyPathLight,
+.blocklyInsertionMarker>.blocklyPathDark {
+  fill-opacity: .2;
+  stroke: none;
+}
+
+.blocklyNonEditableField>text {
+  pointer-events: none;
+}
+
+.blocklyFlyout {
+  position: absolute;
+  z-index: 20;
+}
+
+.blocklyText text {
+  cursor: default;
+}
+
+/*
+  Don't allow users to select text.  It gets annoying when trying to
+  drag a block and selected text moves instead.
+*/
+.blocklySvg text {
+  user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  cursor: inherit;
+}
+
+.blocklyIconGroup {
+  cursor: default;
+}
+
+.blocklyIconGroup:not(:hover),
+.blocklyIconGroupReadonly {
+  opacity: .6;
+}
+
+.blocklyIconShape {
+  fill: #00f;
+  stroke: #fff;
+  stroke-width: 1px;
+}
+
+.blocklyIconSymbol {
+  fill: #fff;
+}
+
+.blocklyMinimalBody {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.blocklyHtmlInput {
+  border: none;
+  border-radius: 4px;
+  height: 100%;
+  margin: 0;
+  outline: none;
+  padding: 0;
+  width: 100%;
+  text-align: center;
+  display: block;
+  box-sizing: border-box;
+}
+
+/* Remove the increase and decrease arrows on the field number editor */
+input.blocklyHtmlInput[type=number]::-webkit-inner-spin-button,
+input.blocklyHtmlInput[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.blocklyMainBackground {
+  stroke-width: 1;
+  stroke: #c6c6c6;  /* Equates to #ddd due to border being off-pixel. */
+}
+
+.blocklyMutatorBackground {
+  fill: #fff;
+  stroke: #ddd;
+  stroke-width: 1;
+}
+
+.blocklyFlyoutBackground {
+  fill: #ddd;
+  fill-opacity: .8;
+}
+
+.blocklyMainWorkspaceScrollbar {
+  z-index: 20;
+}
+
+.blocklyFlyoutScrollbar {
+  z-index: 30;
+}
+
+.blocklyScrollbarHorizontal,
+.blocklyScrollbarVertical {
+  position: absolute;
+  outline: none;
+}
+
+.blocklyScrollbarBackground {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.blocklyScrollbarHandle {
+  fill: #ccc;
+}
+
+.blocklyScrollbarBackground:hover+.blocklyScrollbarHandle,
+.blocklyScrollbarHandle:hover {
+  fill: #bbb;
+}
+
+/* Darken flyout scrollbars due to being on a grey background. */
+/* By contrast, workspace scrollbars are on a white background. */
+.blocklyFlyout .blocklyScrollbarHandle {
+  fill: #bbb;
+}
+
+.blocklyFlyout .blocklyScrollbarBackground:hover+.blocklyScrollbarHandle,
+.blocklyFlyout .blocklyScrollbarHandle:hover {
+  fill: #aaa;
+}
+
+.blocklyInvalidInput {
+  background: #faa;
+}
+
+.blocklyVerticalMarker {
+  stroke-width: 3px;
+  fill: rgba(255,255,255,.5);
+  pointer-events: none;
+}
+
+.blocklyComputeCanvas {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.blocklyNoPointerEvents {
+  pointer-events: none;
+}
+
+.blocklyContextMenu {
+  border-radius: 4px;
+  max-height: 100%;
+}
+
+.blocklyDropdownMenu {
+  border-radius: 2px;
+  padding: 0 !important;
+}
+
+.blocklyDropdownMenu .blocklyMenuItem {
+  /* 28px on the left for icon or checkbox. */
+  padding-left: 28px;
+}
+
+/* BiDi override for the resting state. */
+.blocklyDropdownMenu .blocklyMenuItemRtl {
+  /* Flip left/right padding for BiDi. */
+  padding-left: 5px;
+  padding-right: 28px;
+}
+
+.blocklyWidgetDiv .blocklyMenu {
+  user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  background: #fff;
+  border: 1px solid transparent;
+  box-shadow: 0 0 3px 1px rgba(0,0,0,.3);
+  font: normal 13px Arial, sans-serif;
+  margin: 0;
+  outline: none;
+  padding: 4px 0;
+  position: absolute;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 100%;
+  z-index: 20000;  /* Arbitrary, but some apps depend on it... */
+}
+
+.blocklyWidgetDiv .blocklyMenu:focus {
+  box-shadow: 0 0 6px 1px rgba(0,0,0,.3);
+}
+
+.blocklyDropDownDiv .blocklyMenu {
+  user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  background: inherit;  /* Compatibility with gapi, reset from goog-menu */
+  border: inherit;  /* Compatibility with gapi, reset from goog-menu */
+  font: normal 13px "Helvetica Neue", Helvetica, sans-serif;
+  outline: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 100%;
+  z-index: 20000;  /* Arbitrary, but some apps depend on it... */
+}
+
+/* State: resting. */
+.blocklyMenuItem {
+  border: none;
+  color: #000;
+  cursor: pointer;
+  list-style: none;
+  margin: 0;
+  /* 7em on the right for shortcut. */
+  min-width: 7em;
+  padding: 6px 15px;
+  white-space: nowrap;
+}
+
+/* State: disabled. */
+.blocklyMenuItemDisabled {
+  color: #ccc;
+  cursor: inherit;
+}
+
+/* State: hover. */
+.blocklyMenuItemHighlight {
+  background-color: rgba(0,0,0,.1);
+}
+
+/* State: selected/checked. */
+.blocklyMenuItemCheckbox {
+  height: 16px;
+  position: absolute;
+  width: 16px;
+}
+
+.blocklyMenuItemSelected .blocklyMenuItemCheckbox {
+  background: url(https://cdn.makecode.com/commit/b95bfc950d7f6bc68654e7ae095d238215830162/blockly/media/sprites.png) no-repeat -48px -16px;
+  float: left;
+  margin-left: -24px;
+  position: static;  /* Scroll with the menu. */
+}
+
+.blocklyMenuItemRtl .blocklyMenuItemCheckbox {
+  float: right;
+  margin-right: -24px;
+}
+
+.blocklyMenuSeparator {
+  background-color: #ccc;
+  height: 1px;
+  border: 0;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.blocklyBlockDragSurface, .blocklyAnimationLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: visible !important;
+  z-index: 80;
+  pointer-events: none;
+}
+
+.blocklyField {
+  cursor: default;
+}
+
+.blocklyInputField {
+  cursor: text;
+}
+
+.blocklyDragging .blocklyField,
+.blocklyDragging .blocklyIconGroup {
+  cursor: grabbing;
+}
+
+.blocklyActiveFocus:is(
+  .blocklyFlyout,
+  .blocklyWorkspace,
+  .blocklyField,
+  .blocklyPath,
+  .blocklyHighlightedConnectionPath,
+  .blocklyComment,
+  .blocklyBubble,
+  .blocklyIconGroup,
+  .blocklyTextarea
+) {
+  outline: none;
+}
+
+
+.blocklyZoom>image, .blocklyZoom>svg>image {
+  opacity: .4;
+}
+
+.blocklyZoom>image:hover, .blocklyZoom>svg>image:hover {
+  opacity: .6;
+}
+
+.blocklyZoom>image:active, .blocklyZoom>svg>image:active {
+  opacity: .8;
+}
+
+
+.blocklyToast {
+  font-size: 1.2rem;
+  position: absolute;
+  bottom: -10rem;
+  right: 2rem;
+  padding: 1rem;
+  color: black;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 0.4rem;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  line-height: 1.5;
+  transition: bottom 0.3s ease-out;
+}
+
+.blocklyToast .blocklyToastMessage {
+  maxWidth: 18rem;
+}
+
+.blocklyToast .blocklyToastCloseButton {
+  margin: 0;
+  padding: 0.2rem;
+  background-color: transparent;
+  color: black;
+  border: none;
+  cursor: pointer;
+}
+
+
+.injectionDiv {
+  --commentFillColour: #FFFCC7;
+  --commentBorderColour: #F2E49B;
+}
+
+.blocklyComment .blocklyTextarea {
+  background-color: var(--commentFillColour);
+  border: 1px solid var(--commentBorderColour);
+  box-sizing: border-box;
+  display: block;
+  outline: 0;
+  padding: 5px;
+  resize: none;
+  width: 100%;
+  height: 100%;
+}
+
+.blocklyReadonly.blocklyComment .blocklyTextarea {
+  cursor: inherit;
+}
+
+.blocklyDeleteIcon {
+  width: 20px;
+  height: 20px;
+  display: none;
+  cursor: pointer;
+}
+
+.blocklyFoldoutIcon {
+  width: 20px;
+  height: 20px;
+  transform-origin: 12px 12px;
+  cursor: pointer;
+}
+.blocklyResizeHandle {
+  width: 12px;
+  height: 12px;
+  cursor: se-resize;
+}
+.blocklyReadonly.blocklyComment .blocklyResizeHandle {
+  cursor: inherit;
+}
+
+.blocklyCommentTopbarBackground {
+  fill: var(--commentBorderColour);
+  height: 24px;
+}
+
+.blocklyComment .blocklyCommentPreview.blocklyText {
+  fill: #000;
+  dominant-baseline: middle;
+  visibility: hidden;
+}
+
+.blocklyCollapsed.blocklyComment .blocklyCommentPreview {
+  visibility: visible;
+}
+
+.blocklyCollapsed.blocklyComment .blocklyCommentForeignObject,
+.blocklyCollapsed.blocklyComment .blocklyResizeHandle {
+  display: none;
+}
+
+.blocklyCollapsed.blocklyComment .blocklyFoldoutIcon {
+  transform: rotate(-90deg);
+}
+
+.blocklyRTL .blocklyCommentTopbar {
+  transform: scale(-1, 1);
+}
+
+.blocklyRTL .blocklyCommentForeignObject {
+  direction: rtl;
+}
+
+.blocklyRTL .blocklyCommentPreview {
+  /* Revert the scale and control RTL using direction instead. */
+  transform: scale(-1, 1);
+  direction: rtl;
+}
+
+.blocklyRTL .blocklyResizeHandle {
+  transform: scale(-1, 1);
+  cursor: sw-resize;
+}
+
+.blocklyCommentHighlight {
+  fill: none;
+}
+
+.blocklyCommentText.blocklyActiveFocus {
+  border-color: #fc3;
+  border-width: 2px;
+}
+
+.blocklySelected .blocklyCommentHighlight {
+  stroke: #fc3;
+  stroke-width: 3px;
+}
+
+.blocklyCollapsed.blocklySelected .blocklyCommentHighlight {
+  stroke: none;
+}
+
+.blocklyCollapsed.blocklySelected .blocklyCommentTopbarBackground {
+  stroke: #fc3;
+  stroke-width: 3px;
+}
+
+
+.blocklyFlyoutButton {
+  fill: #888;
+  cursor: default;
+}
+
+.blocklyFlyoutButtonShadow {
+  fill: #666;
+}
+
+.blocklyFlyoutButton:hover {
+  fill: #aaa;
+}
+
+.blocklyFlyoutLabel {
+  cursor: default;
+}
+
+.blocklyFlyoutLabelBackground {
+  opacity: 0;
+}
+
+
+.blocklyTextInputBubble .blocklyTextarea {
+  background-color: var(--commentFillColour);
+  border: 0;
+  box-sizing: border-box;
+  display: block;
+  outline: 0;
+  padding: 5px;
+  resize: none;
+  width: 100%;
+  height: 100%;
+}
+
+
+.blocklyToolboxCategory:not(.blocklyToolboxSelected):hover {
+  background-color: rgba(255, 255, 255, .2);
+}
+
+.blocklyToolbox[layout="h"] .blocklyToolboxCategoryContainer {
+  margin: 1px 5px 1px 0;
+}
+
+.blocklyToolbox[dir="RTL"][layout="h"] .blocklyToolboxCategoryContainer {
+  margin: 1px 0 1px 5px;
+}
+
+.blocklyToolboxCategory {
+  height: 22px;
+  line-height: 22px;
+  margin-bottom: 3px;
+  padding-right: 8px;
+  white-space: nowrap;
+}
+
+.blocklyToolbox[dir="RTL"] .blocklyToolboxCategory {
+  margin-left: 8px;
+  padding-right: 0;
+}
+
+.blocklyToolboxCategoryIcon {
+  background-image: url(https://cdn.makecode.com/commit/b95bfc950d7f6bc68654e7ae095d238215830162/blockly/media/sprites.png);
+  height: 16px;
+  vertical-align: middle;
+  visibility: hidden;
+  width: 16px;
+}
+
+.blocklyToolboxCategoryIconClosed {
+  background-position: -32px -1px;
+}
+
+.blocklyToolbox[dir="RTL"] .blocklyToolboxCategoryIconClosed {
+  background-position: 0 -1px;
+}
+
+.blocklyToolboxSelected>.blocklyToolboxCategoryIconClosed {
+  background-position: -32px -17px;
+}
+
+.blocklyToolbox[dir="RTL"] .blocklyToolboxSelected>.blocklyToolboxCategoryIconClosed {
+  background-position: 0 -17px;
+}
+
+.blocklyToolboxCategoryIconOpen {
+  background-position: -16px -1px;
+}
+
+.blocklyToolboxSelected>.blocklyToolboxCategoryIconOpen {
+  background-position: -16px -17px;
+}
+
+.blocklyToolboxCategoryLabel {
+  cursor: default;
+  font: 16px sans-serif;
+  padding: 0 3px;
+  vertical-align: middle;
+}
+
+.blocklyToolboxDelete .blocklyToolboxCategoryLabel {
+  cursor: url("https://cdn.makecode.com/commit/b95bfc950d7f6bc68654e7ae095d238215830162/blockly/media/handdelete.cur"), auto;
+}
+
+.blocklyToolboxSelected .blocklyToolboxCategoryLabel {
+  color: #fff;
+}
+
+
+.blocklyTreeSeparator {
+  border-bottom: solid #e5e5e5 1px;
+  height: 0;
+  margin: 5px 0;
+}
+
+.blocklyToolbox[layout="h"] .blocklyTreeSeparator {
+  border-right: solid #e5e5e5 1px;
+  border-bottom: none;
+  height: auto;
+  margin: 0 5px 0 5px;
+  padding: 5px 0;
+  width: 0;
+}
+
+
+.blocklyToolboxDelete {
+  cursor: url("https://cdn.makecode.com/commit/b95bfc950d7f6bc68654e7ae095d238215830162/blockly/media/handdelete.cur"), auto;
+}
+
+.blocklyToolboxGrab {
+  cursor: url("https://cdn.makecode.com/commit/b95bfc950d7f6bc68654e7ae095d238215830162/blockly/media/handclosed.cur"), auto;
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+}
+
+/* Category tree in Toolbox. */
+.blocklyToolbox {
+  box-sizing: border-box;
+  user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  background-color: #ddd;
+  overflow-x: visible;
+  overflow-y: auto;
+  padding: 4px 0 4px 0;
+  position: absolute;
+  z-index: 70;  /* so blocks go under toolbox when dragging */
+  -webkit-tap-highlight-color: transparent;  /* issue #1345 */
+}
+
+.blocklyToolboxCategoryGroup {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.blocklyToolboxCategoryGroup:focus {
+  outline: none;
+}
+
+
+.blockly-menuseparator {
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    margin: 4px 0;
+    padding: 0;
+}
+
+
+.pxtFieldDropdown.blocklyActiveFocus > .blocklyFieldRect, .pxtFieldDropdown.blocklyPassiveFocus > .blocklyFieldRect {
+    stroke-opacity: 1;
+}
+
+
+.blocklyDropDownButtonContainer,
+.blocklyDropDownButton {
+    display: inline-block;
+    float: left;
+    border-radius: 4px;
+    text-align: center;
+    margin: 0;
+}
+
+.blocklyDropDownButtonContainer {
+    padding: 4px;
+}
+
+.blocklyDropDownButton {
+    border: 1px solid;
+    transition: box-shadow .1s;
+    cursor: pointer;
+    outline: none;
+}
+
+.blocklyDropDownButtonHover {
+    box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.2);
+}
+
+.blocklyDropDownButtonFocus {
+    box-shadow: 0px 0px 0px 4px rgb(255, 255, 255);
+}
+
+.blocklyDropDownButton:active {
+    box-shadow: 0px 0px 0px 6px rgba(255, 255, 255, 0.2);
+}
+
+.blocklyDropDownButton > img {
+    width: 80%;
+    height: 80%;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+.blocklyImageMenu .blocklyDropDownButton > img {
+    top: unset;
+    transform: unset;
+    margin-top: 4px;
+}
+.blocklyImageMenu .blocklyDropdownTextLabel {
+    line-height: 1.15;
+    margin-top: 2px;
+}
+
+
+.blocklyGridPickerTooltip {
+    z-index: 995;
+}
+
+.blocklyGridPickerPadder {
+    outline: none;
+    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, .3)
+}
+
+.blocklyWidgetDiv .blocklyGridPickerRow {
+    display: table-row;
+}
+
+.blocklyWidgetDiv .blocklyGridPickerMenu {
+    display: table;
+    outline: none;
+    border-spacing: 7px;
+}
+
+.blocklyGridPickerScroller {
+    outline: none;
+    padding: 4px;
+    border-radius: 4px;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+}
+
+.blocklyGridPickerScroller.keyboardNavigable:has(:focus-visible) {
+    outline: 4px solid var(--pxt-focus-border);
+}
+
+.blocklyGridPickerPadder {
+    border-radius: 4px;
+    outline: none;
+    position: relative;
+}
+
+.blocklyGridPickerPadder .ui.input i.search.icon {
+    margin-top: -0.2rem;
+}
+
+.blocklyWidgetDiv .blocklyGridPickerMenu .gridpicker-menuitem {
+    background: white;
+    cursor: pointer;
+    min-width: unset;
+}
+
+.blocklyWidgetDiv .blocklyGridPickerMenu .gridpicker-menuitem-highlight, .blocklyWidgetDiv .blocklyGridPickerMenu .gridpicker-menuitem-hover {
+    background: #d6e9f8;
+    box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.2);
+}
+
+.blocklyWidgetDiv .blocklyGridPickerMenu .gridpicker-option {
+    border: solid 1px black;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 12pt;
+    font-weight: bold;
+    display: table-cell;
+    padding: 8px;
+    text-align: center;
+    vertical-align: top;
+    -webkit-user-select: none;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+        user-select: none;
+}
+
+.blocklyWidgetDiv .blocklyGridPickerMenu .gridpicker-menuitem-content {
+    color: #fff;
+    font-size: 13px;
+    font-family: var(--pxt-page-font);
+}
+
+.blocklyWidgetDiv .blocklyGridPickerMenu .floatLeft {
+    float: left;
+}
+
+.blocklyWidgetDiv .blocklyGridPickerMenu .gridpicker-option.gridpicker-option-selected {
+    position: relative;
+}
+
+.blocklyWidgetDiv .blocklyGridPickerMenu .gridpicker-menuitem .gridpicker-menuitem-checkbox {
+    display: none;
+}
+
+.blocklyWidgetDiv .blocklyGridPickerMenu:focus .blocklyGridPickerRow .gridpicker-menuitem.gridpicker-option-focused {
+    outline: 3px solid var(--pxt-focus-border);
+}
+
+.blocklyGridPickerTooltip {
+    z-index: 995;
+}
+
+.blocklyGridPickerSelectedBar {
+    display: flex;
+    padding-top: 5px;
+    justify-content: space-between;
+}
+
+.blocklyGridPickerSelectedImage {
+    padding: 3px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.ui.input input.blocklyGridPickerSearchBar {
+    background: none;
+    border: none;
+    color: white;
+}
+
+.ui.input input.blocklyGridPickerSearchBar::placeholder {
+    color: white;
+}
+
+.ui.input input.blocklyGridPickerSearchBar::-webkit-input-placeholder {
+    color: white;
+}
+
+.ui.input input.blocklyGridPickerSearchBar::-moz-placeholder {
+    color: white;
+}
+
+.ui.input input.blocklyGridPickerSearchBar:-ms-input-placeholder {
+    color: white;
+}
+
+.ui.input input.blocklyGridPickerSearchBar:-moz-placeholder {
+    color: white;
+}
+
+
+   .blocklyFieldGridContainer {
+     padding: 7px;
+     overflow: auto;
+   }
+
+  .blocklyFieldGrid {
+    display: grid;
+    grid-gap: 7px;
+    grid-template-columns: repeat(var(--grid-columns), min-content);
+  }
+
+ .blocklyFieldGrid .blocklyFieldGridItem {
+   border: 1px solid rgba(1, 1, 1, 0.5);
+   border-radius: 4px;
+   color: white;
+   min-width: auto;
+   background: none;
+   white-space: nowrap;
+   cursor: pointer;
+   padding: 6px 15px;
+ }
+
+ .blocklyFieldGrid .blocklyFieldGridRow {
+   display: contents;
+ }
+
+ .blocklyFieldGrid .blocklyFieldGridItem.blocklyFieldGridItemSelected {
+   background-color: rgba(1, 1, 1, 0.25);
+ }
+
+ .blocklyFieldGrid .blocklyFieldGridItem:focus {
+   box-shadow: 0 0 0 4px hsla(0, 0%, 100%, .2);
+   outline: none;
+ }
+
+
+.blocklyColourSwatch {
+    width: 22px;
+    height: 22px;
+}
+
+.blocklyFieldColour.blocklyFieldGridContainer {
+    padding: 0px;
+}
+
+.blocklyFieldColour .blocklyFieldGrid {
+    grid-gap: 0px;
+    row-gap: 0px;
+    outline: none;
+}
+
+.blocklyFieldColour .blocklyFieldGrid .blocklyFieldGridItem {
+    padding: 0;
+    border: none;
+    margin: 2px;
+}
+
+.blocklyFieldColour .blocklyFieldGrid .blocklyFieldGridItem .blocklyColourSwatch {
+    border: 2px solid rgba(0,0,0,.1);
+    border-radius: 4px;
+}
+
+.blocklyFieldColour .blocklyFieldGridItem:focus .blocklyColourSwatch {
+    box-shadow: 2px 2px 7px 2px rgba(0,0,0,.3);
+    border-color: #eee;
+    border-width: 1px;
+}
+
+.blocklyFieldColour .blocklyFieldGrid .blocklyFieldGridItemSelected .blocklyColourSwatch {
+    outline: 1px solid #000;
+    border-color: #eee;
+    border-width: 1px;
+}
+
+
+    .blocklyMatrix:focus-visible {
+        outline: none;
+    }
+
+
+:root {
+    --blocklyFieldSliderBackgroundColor: #547AB2;
+}
+.blocklyFieldSliderLabel {
+    font-family: "Helvetica Neue", "Segoe UI", Helvetica, sans-serif;
+    font-size: 0.65rem;
+    color: $colour_toolboxText;
+    margin: 8px;
+}
+.blocklyFieldSliderLabelText {
+    font-weight: bold;
+}
+.blocklyFieldSliderReadout {
+    margin-left: 10px;
+}
+
+input[type=range].blocklyFieldSlider {
+    -webkit-appearance: none;
+    width: 100%;
+}
+input[type=range].blocklyFieldSlider:focus {
+    outline: none;
+}
+input[type=range].blocklyFieldSlider::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    margin: 8px;
+    height: 22px;
+    width: 150px;
+    outline: none;
+    border-radius: 11px;
+    margin-bottom: 20px;
+    background: var(--blocklyFieldSliderBackgroundColor);
+}
+input[type=range].blocklyFieldSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 26px;
+    height: 26px;
+    margin-top: -1px;
+    background-color: white;
+    border-radius: 100%;
+    -webkit-box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+input[type=range].blocklyFieldSlider:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid white;
+    outline-offset: 3px;
+    -webkit-box-shadow: 0 0 0 3px var(--pxt-focus-border);
+    -moz-box-shadow: 0 0 0 3px var(--pxt-focus-border);
+    box-shadow: 0 0 0 3px var(--pxt-focus-border);
+}
+input[type=range].blocklyFieldSlider::-moz-range-track {
+    margin: 8px;
+    height: 22px;
+    width: 95%;
+    outline: none;
+    border-radius: 11px;
+    margin-bottom: 20px;
+    background: #547AB2;
+}
+input[type=range].blocklyFieldSlider::-moz-range-thumb {
+    width: 26px;
+    height: 26px;
+    margin-top: -1px;
+    background-color: white;
+    border-radius: 100%;
+    -webkit-box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+
+.field-text-quote {
+    fill: #a31515 !important;
+}
+
+
+.pxt-renderer.classic-theme .blocklyDraggable:not(.blocklyDisabled) .blocklyFieldLedMatrixGroup.blocklyEditableField:not(.blocklyEditing):hover>rect {
+    stroke: none;
+}
+.pxt-renderer.classic-theme .blocklyDraggable:not(.blocklyDisabled) .blocklyFieldLedMatrixGroup.blocklyActiveFocus.blocklyEditableField:not(.blocklyEditing):hover>rect {
+    stroke: var(--blockly-active-node-color);
+    stroke-width: var(--blockly-selection-width);
+}
+.pxt-renderer.classic-theme .blocklyDraggable:not(.blocklyDisabled) .blocklyFieldLedMatrixGroup.blocklyPassiveFocus.blocklyEditableField:not(.blocklyEditing):hover>rect {
+    stroke: var(--blockly-active-node-color);
+    stroke-dasharray: 5px 3px;
+    stroke-width: var(--blockly-selection-width);
+}
+.blocklyFieldLedMatrixGroup > .blocklyFieldRect {
+    fill: none !important;
+}
+
+
+.argumentEditorInput {
+    overflow: visible;
+}
+
+.functioneditor i.argumentEditorTypeIcon {
+    color: var(--pxt-target-foreground1);
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top: 40px;
+    left: 50%;
+    margin-left: -12px;
+}
+
+.argumentEditorRemoveIcon {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top: -40px;
+    left: 50%;
+    margin-left: -12px;
+    cursor: pointer;
+}
+
+
+
+.blockly-dotted-outline-on-hover {
+    transition: stroke .4s;
+}
+.blockly-dotted-outline-on-hover.hover {
+    stroke-dasharray: 2;
+    stroke: white;
+    stroke-width: 2;
+}
+.blocklyDisabledPattern>.blocklyPath.pxtRendererHighlight {
+    fill: none;
+}
+
+
+.blocklyDropdownMenu .blocklyMenuItemCheckbox {
+    filter: contrast(0) brightness(100);
+}
+
+.blocklyVerticalMarker {
+    fill: none;
+}
+
+
+.pxtFlyoutHidden {
+    display: none;
+}
+
+
+.blocklyBubble .blocklyDeleteIcon, .blocklyBubble .blocklyFoldoutIcon {
+    filter: grayscale(100%) brightness(100000);
+}
+
+.blocklyBubble .blocklyTextarea.blocklyText {
+    color: #575E75;
+}
+
+
+.blocklyTextInputBubble .blocklyTextarea {
+  background-color: var(--commentFillColour);
+  border: 0;
+  display: block;
+  margin: 0;
+  outline: 0;
+  padding: 3px;
+  resize: none;
+  text-overflow: hidden;
+}
+
+
+.blockly-ws-search {
+    background: var(--pxt-neutral-background1);
+    color: var(--pxt-neutral-foreground1);
+    border: solid var(--pxt-neutral-alpha50) 1px;
+    border-top: none;
+    border-right: none;
+    box-shadow: 0px 2px 15px var(--pxt-neutral-alpha50);
+}
+
+.blockly-ws-search input {
+    -webkit-tap-highlight-color: transparent;
+    background: var(--pxt-neutral-background1);
+    color: var(--pxt-neutral-foreground1);
+    border: none;
+}
+
+.blockly-ws-search input::-webkit-input-placeholder {
+    color: var(--pxt-neutral-alpha50);
+}
+
+.blockly-ws-search input::-moz-placeholder {
+    color: var(--pxt-neutral-alpha50);
+}
+
+.blockly-ws-search input::-ms-input-placeholder {
+    color: var(--pxt-neutral-alpha50);
+}
+
+.blockly-ws-search input:active,
+.blockly-ws-search input:focus {
+    border-color: var(--pxt-neutral-alpha50);
+    background: var(--pxt-neutral-background1);
+    color: var(--pxt-neutral-foreground1);
+}
+
+.blockly-ws-search input::selection {
+    color: var(--pxt-neutral-foreground1);
+}
+
+.blockly-ws-search button {
+    padding-left: 6px;
+    padding-right: 6px;
+    color: var(--pxt-neutral-foreground1);
+}
+
+:root {
+  --divider-border-color: #eee;
+  --key-border-color: #ccc;
+  --shortcut-modal-border-color: #9aa0a6;
+}
+
+.shortcut-modal {
+  border: 1px solid var(--shortcut-modal-border-color);
+  border-radius: 12px;
+  box-shadow: 6px 6px 32px rgba(0,0,0,.5);
+  flex-direction: column;
+  gap: 12px;
+  margin: auto;
+  max-height: 82vh;
+  max-width: calc(100% - 10em);
+  padding: 24px 12px 24px 32px;
+  position: relative;
+  z-index: 99;
+}
+
+.shortcut-modal[open] {
+  display: flex;
+}
+
+.shortcut-modal .close-modal {
+  border: 0;
+  background: transparent;
+  float: inline-end;
+  margin: 0 0 0 0;
+  position: absolute;
+  top: 16px;
+  right: 24px;
+}
+
+.shortcut-modal h1 {
+  font-weight: 600;
+  font-size: 1.2em;
+}
+
+.shortcut-modal:before {
+  background: radial-gradient(rgba(244, 244, 244, 0.43), rgba(75, 75, 75, 0.51));
+  align-items: center;
+  display: block;
+  font-family: Roboto;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.shortcut-tables {
+  display: grid;
+  align-items: start;
+  grid-template-columns: 1fr;
+  row-gap: 1em;
+  column-gap: 2em;
+}
+
+@media (min-width: 950px) {
+  .shortcut-tables {
+    grid-template-columns: 1fr 1fr
+  }
+}
+
+@media (min-width: 1360px) {
+  .shortcut-tables {
+    grid-template-columns: 1fr 1fr 1fr
+  }
+}
+
+.shortcut-table {
+  border-collapse: collapse;
+  font-family: Roboto;
+  font-size: .9em;
+}
+
+.shortcut-table th {
+  padding-inline-end: 0.5em;
+  text-align: left;
+  text-wrap: nowrap;
+  vertical-align: baseline;
+}
+
+.shortcut-table td:first-child {
+  text-wrap: auto;
+  width: 40%;
+}
+
+.shortcut-table tr:has(+ .category) {
+  --divider-border-color: transparent;
+  margin-end: 1em;
+}
+
+.shortcut-table tr:not(.category, :last-child) {
+  border-bottom: 1px solid var(--divider-border-color);
+}
+
+.shortcut-table td {
+  padding: 0.2em 1em 0.3em 0;
+  text-wrap: nowrap;
+}
+
+.shortcut-table h2 {
+  border-bottom: 1px solid #999;
+  font-size: 1em;
+  padding-block-end: 0.5em;
+}
+
+.shortcut-table .key {
+  border: 1px solid var(--key-border-color);
+  border-radius: 8px;
+  display: inline-block;
+  margin: 0 4px;
+  min-width: 2em;
+  padding: .3em .5em;
+  text-align: center;
+}
+
+.shortcut-table .separator {
+  color: gray;
+  display: inline-block;
+  padding: 0 0.5em;
+}
+
+.shortcut-container {
+  font-size: 0.95em;
+  overflow: auto;
+  padding: 0.5em;
+}
+
+.shortcut-combo {
+  display: inline-block;
+  padding: 0.25em 0;
+  text-wrap: nowrap;
+}
+
+</style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,height=device-height,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0">
+    <script type="text/javascript">
+    if(/[&?]translate=1/.test(window.location.href)) {
+		var _jipt = [];
+        _jipt.push(['project', 'makecode']);
+        _jipt.push(['escape', function() {
+            window.location.href = window.location.href.replace(/[$\?]translate=1/, '');
+        }]);
+        _jipt.push(['before_dom_insert', function(text, node, attribute) {
+            if (text)
+                text = text.replace(/^\{(id|loc):[^\}]+\}/g, '');
+            return text;
+        }]);
+        // inject crowdin
+        (function _() {
+            var s = document.createElement("script");
+            s.setAttribute("type", "text/javascript");
+            s.setAttribute("src", "//cdn.crowdin.com/jipt/jipt.js");
+            document.head.insertBefore(s, document.head.firstElementChild);
+        })();
+    }
+	</script>
+
+
+<!-- include appmeta.html -->
+
+<!-- include robotsmeta.html -->
+
+<!-- end include robotsmeta.html -->
+
+<title>MakeCode Maker - Blocks / Javascript editor</title>
+<meta name="description" content="A Blocks / JavaScript code editor for MakeCode Maker Boards">
+<link rel="manifest" href="https://maker.makecode.com/blob/b74cbe3f36f811ef8253652185a0f651c19caf12/sim.webmanifest">
+
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MakeCode Maker - Blocks / Javascript editor">
+<meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
+<meta name="format-detection" content="telephone=no">
+<meta name="application-name" content="MakeCode Maker - Blocks / Javascript editor">
+
+<meta name="msapplication-TileColor" content="#ecf0f1">
+<meta name="msapplication-TileImage" content="">
+<meta name="msapplication-config" content="none">
+<meta name="theme-color" content="#ecf0f1">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="">
+<meta name="twitter:title" content="MakeCode Maker - Blocks / Javascript editor">
+<meta name="twitter:description" content="A Blocks / JavaScript code editor for MakeCode Maker Boards">
+<meta name="twitter:image" content="">
+
+<meta property="og:title" content="MakeCode Maker - Blocks / Javascript editor">
+<meta property="og:site_name" content="MakeCode Maker - Blocks / Javascript editor">
+<meta property="og:description" content="A Blocks / JavaScript code editor for MakeCode Maker Boards">
+<meta property="og:image" content="">
+
+<link rel="apple-touch-icon" href="">
+<link rel="icon" type="image/png" href="">
+<link rel="shortcut icon" href="">
+
+<!-- end include appmeta.html -->
+
+
+    <link rel="stylesheet" data-rtl="https://cdn.makecode.com/blob/edf7f28d354899784b10a91bc4e85391011fab25/rtlsemantic.css" href="https://cdn.makecode.com/blob/e18721e06774f824c92617ea4af0f3bf12df9ed6/semantic.css" type="text/css">
+<script src="https://cdn.makecode.com/blob/c45ac1d707915fdf8ec69d4e8de5d7677db3482a/ai.2.min.js"></script><style type="text/css">.ui.accent { color: #ecf0f1; }
+                .ui.inverted.menu .accent.active.item, .ui.inverted.accent.menu  { background-color: #ecf0f1; }</style><link href="https://cdn.makecode.com/blob/dde693708c65ebc0edfbfc43a1ebe6aeaaaf0b64/blockly.css" rel="stylesheet" type="text/css" id="style-blockly.css"><style>.immersive-reader-button{cursor:pointer;display:inline-block;padding:5px;} .immersive-reader-button:hover{background:rgba(0,0,0,.05);border-radius:2px</style></head>
+
+<body class="main pxt-theme-root ReactModal__Body--open"><div data-react-modal-body-trap="" tabindex="0" style="position: absolute; opacity: 0;"></div>
+
+
+    <div id="custom-content">
+    </div>
+    <div id="blocks-editor-field-div">
+    </div>
+
+    <div id="allcontent">
+        <div id="editorcontent">
+            <div id="content" class="ui dimmable full-abs" aria-hidden="true"><div id="root" class="ui dimmable ide inHome hideEditorToolbar editorlang-text full-abs"><div id="simulator" class="simulator"><div id="editorSidebar" class="editor-sidebar"><div class="simulator-container hidden"><div class="ui items simPanel invisibleScrollbar"><div id="boardview" class="ui vertical editorFloat" role="region" aria-label="Simulator" tabindex="-1"><div id="simulators" class="simulator"></div><div id="debugger" class="ui item landscape only"></div></div><div></div><div class="ui item portrait hide hidefullscreen"></div><div class="ui item grid centered portrait hide hidefullscreen"></div><div class="ui item grid centered portrait hide hidefullscreen"></div><div id="serialPreview" class="ui editorFloat portrait hide hidefullscreen"><div></div><div></div></div><div id="miniSimOverlay" role="button" title="Open in fullscreen"></div></div></div></div></div><div id="maineditor" class="" role="main" aria-hidden="true"><div class="full-abs" id="pxtJsonEditor" style="display: none;"></div><div class="full-abs" id="githubEditor" style="display: none;"></div><div class="full-abs" id="blocksArea" style="display: none;"><div class="blocksAndErrorList"><div class="blocksEditorOuter"><div id="blocksEditor"><div class="injectionDiv pxt-renderer classic-theme" dir="LTR" style="--blocklyGridPattern: url(#blocklyGridPattern9352917076235786); --blocklyEmbossFilter: url(#blocklyEmbossFilter31196595522716775); --blocklyDisabledPattern: url(#blocklyDisabledPattern31196595522716775); --blocklyDebugFilter: url(#blocklyDebugFilter31196595522716775); --blocklySelectedGlowFilter: url(#blocklySelectedGlowFilter31196595522716775); --blocklyReplacementGlowFilter: url(#blocklyReplacementGlowFilter31196595522716775);"><div layout="v" class="blocklyToolbox" dir="LTR" id="blockly-0" style="display: block; left: 0px; height: 100%;"><div class="blocklyToolboxCategoryGroup" tabindex="-1"><div style=""><div class="blocklyTreeRoot"><div class="blocklyTreeRow" style="opacity: 0;"></div></div><div class="ui active dimmer"><div class="ui loader indeterminate"></div></div></div><div id="debuggerToolbox"></div></div></div><svg xmlns="http://www.w3.org/2000/svg" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="blocklySvg"><defs><pattern id="blocklyGridPattern9352917076235786" patternUnits="userSpaceOnUse" width="18" height="18" x="0" y="0"><line stroke="rgba(189, 195, 199, 0.20)" stroke-width="0.9" x1="8.55" y1="9.450000000000001" x2="10.35" y2="9.450000000000001"></line><line stroke="rgba(189, 195, 199, 0.20)" stroke-width="0.9" x1="9.450000000000001" y1="8.55" x2="9.450000000000001" y2="10.35"></line></pattern></defs><g class="blocklyWorkspace" id="1G;93HV@Wh;V,aE/@giI" aria-label="Blockly Workspace" tabindex="0"><rect height="100%" width="100%" class="blocklyMainBackground" style="fill: var(--blocklyGridPattern);"></rect><g class="blocklyBlockCanvas" transform="translate(0, 0) scale(0.9)"></g><g class="blocklyBubbleCanvas" transform="translate(0, 0) scale(0.9)"></g><rect height="15" width="15" class="blocklyScrollbarBackground" x="-15.5" y="-15.5"></rect><defs><filter id="blocklyEmbossFilter31196595522716775"><feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur"></feGaussianBlur><feSpecularLighting in="blur" surfaceScale="1" specularConstant="0.5" specularExponent="10" lighting-color="white" result="specOut"><fePointLight x="-5000" y="-10000" z="20000"></fePointLight></feSpecularLighting><feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut"></feComposite><feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"></feComposite></filter><pattern id="blocklyDisabledPattern31196595522716775" patternUnits="userSpaceOnUse" width="10" height="10"><rect width="10" height="10" fill="#aaa"></rect><path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="#cc0"></path></pattern><filter id="blocklyDebugFilter31196595522716775" height="160%" width="180%" y="-30%" x="-40%"><feComponentTransfer result="outBlur"><feFuncA type="table" tableValues="0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"></feFuncA></feComponentTransfer><feFlood flood-color="#ff0000" flood-opacity="0.5" result="outColor"></feFlood><feComposite in="outColor" in2="outBlur" operator="in" result="outGlow"></feComposite></filter></defs><defs><filter id="blocklySelectedGlowFilter31196595522716775" height="160%" width="180%" y="-30%" x="-40%"><feGaussianBlur in="SourceGraphic" stdDeviation="0.5"></feGaussianBlur><feComponentTransfer result="outBlur"><feFuncA type="table" tableValues="0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"></feFuncA></feComponentTransfer><feFlood flood-color="#fff200" flood-opacity="1" result="outColor"></feFlood><feComposite in="outColor" in2="outBlur" operator="in" result="outGlow"></feComposite></filter><filter id="blocklyReplacementGlowFilter31196595522716775" height="160%" width="180%" y="-30%" x="-40%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"></feGaussianBlur><feComponentTransfer result="outBlur"><feFuncA type="table" tableValues="0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"></feFuncA></feComponentTransfer><feFlood flood-color="#fff200" flood-opacity="1" result="outColor"></feFlood><feComposite in="outColor" in2="outBlur" operator="in" result="outGlow"></feComposite><feComposite in="SourceGraphic" in2="outGlow" operator="over"></feComposite></filter></defs><defs><filter id="blocklyHighlightedGlowFilter31196595522716775" height="160%" width="180%" y="-30%" x="-40%"><feGaussianBlur in="SourceGraphic" stdDeviation="1.1"></feGaussianBlur><feComponentTransfer result="outBlur"><feFuncA type="table" tableValues="0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"></feFuncA></feComponentTransfer><feFlood flood-color="#FFF200" flood-opacity="1" result="outColor"></feFlood><feComposite in="outColor" in2="outBlur" operator="in" result="outGlow"></feComposite></filter><filter id="blocklyErrorHighlightedGlowFilter31196595522716775" height="160%" width="180%" y="-30%" x="-40%"><feGaussianBlur in="SourceGraphic" stdDeviation="1.1"></feGaussianBlur><feComponentTransfer result="outBlur"><feFuncA type="table" tableValues="0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"></feFuncA></feComponentTransfer><feFlood flood-color="#FF0000" flood-opacity="1" result="outColor"></feFlood><feComposite in="outColor" in2="outBlur" operator="in" result="outGlow"></feComposite></filter><filter id="blocklyBubbleEmbossGlowFilter31196595522716775" height="160%" width="180%" y="-30%" x="-40%"><feGaussianBlur in="SourceGraphic" stdDeviation="0.92"></feGaussianBlur><feComponentTransfer result="outBlur"><feFuncA type="table" tableValues="0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"></feFuncA></feComponentTransfer><feFlood flood-color="#000000" flood-opacity="0.5" result="outColor"></feFlood><feComposite in="outColor" in2="outBlur" operator="in" result="outGlow"></feComposite><feMerge><feMergeNode in="outBlur"></feMergeNode><feMergeNode in="outGlow"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter></defs></g></svg><svg class="blocklyScrollbarVertical blocklyMainWorkspaceScrollbar" width="15" height="0" style="transform: translate(-15.5px, 0.5px);"><g><rect class="blocklyScrollbarBackground" width="15" height="0"></rect><rect class="blocklyScrollbarHandle" rx="5" ry="5" width="10" x="2.5" height="0" y="0"></rect></g></svg><svg class="blocklyScrollbarHorizontal blocklyMainWorkspaceScrollbar" height="15" width="0" style="transform: translate(0.5px, -15.5px);"><g><rect class="blocklyScrollbarBackground" height="15" width="0"></rect><rect class="blocklyScrollbarHandle" rx="5" ry="5" height="10" y="2.5" width="0" x="0"></rect></g></svg><svg class="blocklyFlyout blocklyToolboxFlyout" style="display: none;"><path class="blocklyFlyoutBackground"></path><g class="blocklyWorkspace" id="!}lpzIdp15,!c3SCoSG(" tabindex="0"><g class="blocklyBlockCanvas"></g><g class="blocklyBubbleCanvas"></g><defs><filter id="blocklyEmbossFilter40492655577393954"><feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur"></feGaussianBlur><feSpecularLighting in="blur" surfaceScale="1" specularConstant="0.5" specularExponent="10" lighting-color="white" result="specOut"><fePointLight x="-5000" y="-10000" z="20000"></fePointLight></feSpecularLighting><feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut"></feComposite><feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"></feComposite></filter><pattern id="blocklyDisabledPattern40492655577393954" patternUnits="userSpaceOnUse" width="10" height="10"><rect width="10" height="10" fill="#aaa"></rect><path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="#cc0"></path></pattern><filter id="blocklyDebugFilter40492655577393954" height="160%" width="180%" y="-30%" x="-40%"><feComponentTransfer result="outBlur"><feFuncA type="table" tableValues="0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"></feFuncA></feComponentTransfer><feFlood flood-color="#ff0000" flood-opacity="0.5" result="outColor"></feFlood><feComposite in="outColor" in2="outBlur" operator="in" result="outGlow"></feComposite></filter></defs><defs><filter id="blocklySelectedGlowFilter40492655577393954" height="160%" width="180%" y="-30%" x="-40%"><feGaussianBlur in="SourceGraphic" stdDeviation="0.5"></feGaussianBlur><feComponentTransfer result="outBlur"><feFuncA type="table" tableValues="0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"></feFuncA></feComponentTransfer><feFlood flood-color="#fff200" flood-opacity="1" result="outColor"></feFlood><feComposite in="outColor" in2="outBlur" operator="in" result="outGlow"></feComposite></filter><filter id="blocklyReplacementGlowFilter40492655577393954" height="160%" width="180%" y="-30%" x="-40%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"></feGaussianBlur><feComponentTransfer result="outBlur"><feFuncA type="table" tableValues="0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"></feFuncA></feComponentTransfer><feFlood flood-color="#fff200" flood-opacity="1" result="outColor"></feFlood><feComposite in="outColor" in2="outBlur" operator="in" result="outGlow"></feComposite><feComposite in="SourceGraphic" in2="outGlow" operator="over"></feComposite></filter></defs><defs><filter id="blocklyHighlightedGlowFilter40492655577393954" height="160%" width="180%" y="-30%" x="-40%"><feGaussianBlur in="SourceGraphic" stdDeviation="1.1"></feGaussianBlur><feComponentTransfer result="outBlur"><feFuncA type="table" tableValues="0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"></feFuncA></feComponentTransfer><feFlood flood-color="#FFF200" flood-opacity="1" result="outColor"></feFlood><feComposite in="outColor" in2="outBlur" operator="in" result="outGlow"></feComposite></filter><filter id="blocklyErrorHighlightedGlowFilter40492655577393954" height="160%" width="180%" y="-30%" x="-40%"><feGaussianBlur in="SourceGraphic" stdDeviation="1.1"></feGaussianBlur><feComponentTransfer result="outBlur"><feFuncA type="table" tableValues="0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"></feFuncA></feComponentTransfer><feFlood flood-color="#FF0000" flood-opacity="1" result="outColor"></feFlood><feComposite in="outColor" in2="outBlur" operator="in" result="outGlow"></feComposite></filter><filter id="blocklyBubbleEmbossGlowFilter40492655577393954" height="160%" width="180%" y="-30%" x="-40%"><feGaussianBlur in="SourceGraphic" stdDeviation="0.92"></feGaussianBlur><feComponentTransfer result="outBlur"><feFuncA type="table" tableValues="0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"></feFuncA></feComponentTransfer><feFlood flood-color="#000000" flood-opacity="0.5" result="outColor"></feFlood><feComposite in="outColor" in2="outBlur" operator="in" result="outGlow"></feComposite><feMerge><feMergeNode in="outBlur"></feMergeNode><feMergeNode in="outGlow"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter></defs></g></svg><svg class="blocklyScrollbarVertical blocklyFlyoutScrollbar" width="15"><g><rect class="blocklyScrollbarBackground" width="15"></rect><rect class="blocklyScrollbarHandle" rx="5" ry="5" width="10" x="2.5"></rect></g></svg><svg class="blocklyBlockDragSurface" xmlns="http://www.w3.org/2000/svg" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><g transform="translate(0, 0) scale(0.9)"></g></svg><svg class="blocklyAnimationLayer" xmlns="http://www.w3.org/2000/svg" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><g></g></svg></div></div><div id="blocklyTrashIcon" style="opacity: 0; display: none;"><i class="trash icon" aria-hidden="true"></i></div></div></div></div><div class="full-abs" id="serialEditor" style="display: none;"><div id="serialArea" class="no-toggle hide-view-latest"><div id="serialHeader" class="ui serialHeader"><div class="leftHeaderWrapper"><div class="leftHeader"><button class="ui button   neutral" title="Go back" tabindex="0"><i class="icon arrow left " aria-hidden="true" role="presentation"></i><span class="ui text landscape only">Go back</span></button><div class="common-editor-toggle-outer"><div id="serial-editor-toggle" class="common-toggle-accessibility" role="tablist"><button id="serial-editor-toggle-option-0" class="common-button selected" title="Console" role="tab" tabindex="0" aria-selected="true" data-isfocusable="true"><span class="common-button-flex"><span class="common-button-label">Console</span></span></button><button id="serial-editor-toggle-option-1" class="common-button" title="Data Log" role="tab" tabindex="-1" aria-selected="false" data-isfocusable="true"><span class="common-button-flex"><span class="common-button-label">Data Log</span></span></button></div><div id="serial-editor-toggle" class="common-editor-toggle slim tablet-compact" role="tablist" aria-hidden="true"><div class="common-editor-toggle-item selected"><button class="common-button" title="Console" role="tab" tabindex="-1" aria-hidden="true"><span class="common-button-flex"><i class="fas fa-terminal" aria-hidden="true"></i><span class="common-button-label">Console</span></span></button></div><div class="common-editor-toggle-item"><button class="common-button" title="Data Log" role="tab" tabindex="-1" aria-hidden="true"><span class="common-button-flex"><i class="fas fa-table" aria-hidden="true"></i><span class="common-button-label">Data Log</span></span></button></div><div class="common-editor-toggle-handle" aria-hidden="true"></div></div></div></div></div><div class="rightHeader"><span class="ui small header">Simulator</span><button class="ui button   ui left floated icon button green toggleRecord csv-hide" title="Pause recording" tabindex="0"><i class="icon pause icon " aria-hidden="true" role="presentation"></i></button><button class="ui button   ui icon blue button editorExport" title="Export data" tabindex="0" aria-label="Export data"><i class="icon download " aria-hidden="true" role="presentation"></i></button><button class="ui button   ui icon neutral button editorExport csv-hide" title="Save raw text" tabindex="0" aria-label="Save raw text"><i class="icon copy " aria-hidden="true" role="presentation"></i></button></div></div><div id="serialPlaceholder" class="ui segment"><div class="ui bottom left attached no-select label seriallabel">Values will be logged when the simulator sends data</div></div><div id="serialCharts"></div><div id="serialConsole"></div><div id="serialCsv"></div><button class="ui button   " id="serialCsvViewLatest" tabindex="0">View latest row...</button></div></div><div class="full-abs" id="assetEditor" style="display: none;"><div class="asset-editor-outer"><div class="asset-editor-sidebar"><div class="common-list asset-editor-sidebar-info"><div class="common-list-item"><div>Asset Preview</div></div><div class="common-list-item"><div class="asset-editor-sidebar-preview"></div></div><div class="common-list-item"><div class="asset-editor-sidebar-name">No asset selected</div></div></div><div class="common-list asset-editor-sidebar-controls"><div class="common-list-item"></div><div class="common-list-item"></div><div class="common-list-item"></div><div class="common-list-item"></div><div class="common-list-item"><button class="common-button tertiary asset-palette-button" title="Open the color palette" role="button" tabindex="0" aria-label="Open the color palette"><span class="common-button-flex"><i class="fas fa-palette" aria-hidden="true"></i><span class="common-button-label">Colors</span></span></button></div></div><textarea class="asset-editor-sidebar-copy" style=""></textarea></div><div class="asset-editor-gallery"><div class="asset-editor-topbar"><div class="asset-editor-gallery-tab selected" role="navigation">My Assets</div><div class="asset-editor-gallery-tab " role="navigation">Gallery</div></div><div class="asset-editor-card-list "><div><button class="common-button create-new" title="Create a new asset" role="button" tabindex="0" aria-label="Create a new asset"><span class="common-button-flex"><i class="icon huge add circle" aria-hidden="true"></i><span class="common-button-label"></span></span></button></div></div><div class="asset-editor-card-list hidden"><div></div></div></div></div></div><div class="full-abs" id="monacoEditor" style="display: none;"><div id="monacoEditorArea" class="monacoEditorArea" style="direction: ltr;"><div id="monacoEditorRightArea" class="monacoEditorRightArea"><div id="monacoEditorInner"><div id="monacoFlyoutWidget" class="monacoFlyout" style="display: none;"><div id="monacoFlyoutWrapper" role="list"><div class="monacoFlyoutLabel monacoFlyoutHeading"><span class="monacoFlyoutHeadingIcon blocklyTreeIcon blocklyTreeIconDefault" role="presentation" style="color: rgb(109, 91, 165);"></span><div class="monacoFlyoutLabelText">undefined</div></div></div></div></div><div class="errorList errorListSummary" hidden=""><div class="errorListHeader" role="button" aria-label="Expand error list" tabindex="0"><h4>Problems</h4><div class="ui red circular label countBubble">0</div><button id="debug-button" class="common-button debuggerSuggestion" title="Debug this project" role="button" tabindex="0" aria-label="Debug this project"><span class="common-button-flex"><i class="icon bug" aria-hidden="true"></i><span class="common-button-label">Debug this project</span></span></button><div class="filler"></div><div class="toggleButton"><i class="icon chevron up " aria-hidden="true" role="presentation"></i></div></div></div></div></div></div></div><div id="homescreen" class="full-abs"><div class="ui home projectsdialog"><header class="menubar" role="banner"><div class="ui accessibleMenu borderless fixed menu" role="menubar"><div class="ui item link    menu " role="menuitem" aria-label="New Project" title="New Project" tabindex="0"><i class="icon add circle icon-and-text  " aria-hidden="true" role="presentation"></i><span class="ui text">New Project</span></div><div class="ui item link    menu " role="menuitem" aria-label="Import Project" title="Import Project" tabindex="0"><i class="icon upload icon-and-text  " aria-hidden="true" role="presentation"></i><span class="ui text">Import Project</span></div></div><div id="mainmenu" class="ui borderless fixed menu  " role="menubar"><div class="left menu"><div class="ui item logo organization" role="presentation"><img class="ui logo " src="https://cdn.makecode.com/blob/cd1a7c2065a8aae2437d49888f9a7f35d77932d8/static/Microsoft-logo_rgb_c-gray.png" alt="Microsoft MakeCode Logo"></div><div aria-label="board Logo" role="presentation" class="ui item logo brand "><img class="ui  logo" src="https://cdn.makecode.com/blob/78e4304c9678839a1c6e673528aa200003065f40/static/logo.svg" alt="board Logo"></div></div><div class="right menu"><div></div><div role="menuitem" title="Settings" aria-haspopup="true" class="ui dropdown icon item icon more-dropdown-menuitem" tabindex="0"><i class="icon setting large " aria-hidden="true" role="presentation"></i><div role="menu" aria-label="Dropdown menu Settings" aria-hidden="true" class="menu"><div class="ui item link    " role="menuitem" aria-label="Theme" title="Theme" tabindex="0"><i class="icon paint brush icon-and-text  " aria-hidden="true" role="presentation"></i><span class="ui text">Theme</span></div><div class="ui divider"></div><div class="ui item link    " role="menuitem" aria-label="Report Abuse..." title="Report Abuse..." tabindex="0"><i class="icon warning circle icon-and-text  " aria-hidden="true" role="presentation"></i><span class="ui text">Report Abuse...</span></div><div class="ui item link    " role="menuitem" aria-label="Reset" title="Reset" tabindex="0"><i class="icon sign out icon-and-text  " aria-hidden="true" role="presentation"></i><span class="ui text">Reset</span></div><div class="ui item link    " role="menuitem" aria-label="About..." title="About..." tabindex="0"><span class="ui text">About...</span></div></div></div></div></div></header><div class="ui segment bottom attached tab active tabsegment" role="main"><div class="ui segment getting-started-segment hero" role="region" aria-label="Banner" style="background-image: url(&quot;https://cdn.makecode.com/blob/4fe4d3e3fc36749019b929a071ad2015815550b9/static/hero.jpg&quot;);"><div class="hero-banner-contents"></div></div><h1 class="accessible-hidden">MakeCode Home</h1><div class="ui segment gallerysegment mystuff-segment" role="region" aria-label="My Projects"><div class="ui heading"><div class="column" style="z-index: 1;"><h2 class="ui header myproject-header">My Projects<span class="view-all-button" tabindex="0" title="View all projects" role="button">View All</span></h2></div><div class="column right aligned" style="z-index: 1;"><button class="ui button icon icon-and-text  import-dialog-btn neutral" title="Import a project" tabindex="0"><i class="icon upload icon-and-text  " aria-hidden="true" role="presentation"></i><span class="ui text landscape only">Import</span></button></div></div><div class="content"><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 1185px; margin-left: 0px;"><div class="carouselitem "><div role="button" class="ui card link buttoncard newprojectcard" title="Creates a new empty project" tabindex="0"><div class="content"><i class="icon huge add circle " aria-hidden="true" role="presentation"></i><span class="header">New Project</span></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Jacdac"><h2 class="ui header heading">Jacdac </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 1480px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="MSR Jacdac IoT Brain 48 (ESP32-S2)" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/6175d6b0a1e947cee2320b9700802258ac6669f6/static/libs/jacdac-iot-s2.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">MSR Jacdac IoT Brain 48 (ESP32-S2)<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="MSR Jacdac Brain RP2040 59" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/694ea9a98ef0395a67b40ee40a2055eb845941f2/static/libs/jacdac-brain-rp2040.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">MSR Jacdac Brain RP2040 59<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="MSR Jacdac Brain F4 41" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/e15955f229ae310bd1cb9d647d492aa1e108a17d/static/libs/jacdac-brain-f4.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">MSR Jacdac Brain F4 41<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="MSR Jacdac NRF52833 High Power 32" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/c1522812c838449274c01a62c77cc99aa3e13376/static/libs/jacdac-nrfbrain.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">MSR Jacdac NRF52833 High Power 32<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Adafruit"><h2 class="ui header heading">Adafruit </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 3840px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Adafruit Metro M0 Express" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/c7fad3527fe92a01fc975b8bf90d934f3e64dcfc/static/libs/adafruit-metro-m0-express.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Adafruit Metro M0 Express<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Adafruit Feather M0 Express" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/f7fb02a38137b10d7e1e6823b8c8f0552b4a4c8b/static/libs/adafruit-feather-m0-express.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Adafruit Feather M0 Express<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Adafruit ItsyBitsy M0 Express" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/789ab194d8408fa40c2f8db2bcf16d204f48f0bb/static/libs/adafruit-itsybitsy-m0-express.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Adafruit ItsyBitsy M0 Express<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Adafruit Trinket M0" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/0021e2207cec1b0d79cb3cb3b6fa50edc099395b/static/libs/adafruit-trinket-m0.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Adafruit Trinket M0<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Adafruit Gemma M0" aria-expanded="false" tabindex="-1"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/851247ed5cf0fbe724f565c5381ba1fe2b210c44/static/libs/adafruit-gemma-m0.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Adafruit Gemma M0<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Adafruit Metro M4 Express" aria-expanded="false" tabindex="-1"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/637872dbbcc80fb96ebf7c95ad91f0ffc09edaf5/static/libs/adafruit-metro-m4-express.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Adafruit Metro M4 Express<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Adafruit Feather M4 Express" aria-expanded="false" tabindex="-1"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/bf563218669125cdecd433467a3b5f724d93c20d/static/libs/adafruit-feather-m4-express.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Adafruit Feather M4 Express<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Adafruit ItsyBitsy M4 Express" aria-expanded="false" tabindex="-1"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/789ab194d8408fa40c2f8db2bcf16d204f48f0bb/static/libs/adafruit-itsybitsy-m4-express.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Adafruit ItsyBitsy M4 Express<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Adafruit Grand Central M4 Express " aria-expanded="false" tabindex="-1"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/ff2f3690b05357e63998570820a863fab5ebb403/static/libs/adafruit-grand-central-m4-express.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Adafruit Grand Central M4 Express <div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Adafruit Feather Bluefruit NRF52840" aria-expanded="false" tabindex="-1"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/08c69a8638b97ea61ee322a5888ec2e6ad21cb88/static/libs/adafruit-feather-nrf52840-express.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Adafruit Feather Bluefruit NRF52840<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Adafruit ItsyBitsy NRF52840 Express" aria-expanded="false" tabindex="-1"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://makecode.com/not-found/HEAD/static/libs/adafruit-itsybitsy-nrf52840-express.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Adafruit ItsyBitsy NRF52840 Express<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Adafruit Circuit Playground Bluefruit" aria-expanded="false" tabindex="-1"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/9caaf28a885e00545fc06b5366552c7e190280f6/static/libs/adafruit-circuit-playground-bluefruit.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Adafruit Circuit Playground Bluefruit<div class="tags"></div></div></div></div></div></div></div><span role="button" class="carouselarrow right aligned" tabindex="0" title="See more" aria-label="See more"><i class="icon circle angle right " aria-hidden="true" role="presentation"></i></span></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Arduino"><h2 class="ui header heading">Arduino </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 1775px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Arduino MKR" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/42b90fa743778ce9ff141078106337363ce758ce/static/libs/arduino-mkr1000.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Arduino MKR<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Arduino Zero" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/28055d1297d51f9ec837ed400aed9f6e09151a32/static/libs/arduino-zero.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Arduino Zero<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Arduino MKR1300" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/a71e8ce19ff02ba5094cb5c2ca120ec7f3e7ba4a/static/libs/arduino-mkr1300.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Arduino MKR1300<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Arduino MKR1010" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/eb4a3e152b1896e7f24e3849bab4a7f440a13246/static/libs/arduino-mkr1010.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Arduino MKR1010<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Arduino Nano 33 BLE Sense" aria-expanded="false" tabindex="-1"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/af74055c824a128b3590065e9d06ba73f91d8426/static/libs/arduino-nano-33-ble-sense.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Arduino Nano 33 BLE Sense<div class="tags"></div></div></div></div></div></div></div><span role="button" class="carouselarrow right aligned" tabindex="0" title="See more" aria-label="See more"><i class="icon circle angle right " aria-hidden="true" role="presentation"></i></span></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="SparkFun"><h2 class="ui header heading">SparkFun </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 1480px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Sparkfun RedBoard Turbo" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/33d27d6c951920b1797ecd2749adbb1d6ea9a08b/static/libs/sparkfun-redboard-turbo.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Sparkfun RedBoard Turbo<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Sparkfun LumiDrive" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/0bbdc399a21f38ed735d81e44ac43f70a0110093/static/libs/sparkfun-lumidrive.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Sparkfun LumiDrive<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Sparkfun SAMD21 Dev Breakout" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/da52bdfec28ded52a96d9890ff3747a3d757e6f1/static/libs/sparkfun-samd21-dev-breakout.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Sparkfun SAMD21 Dev Breakout<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Sparkfun SAMD21 Mini Breakout" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/908c3189ad02c9498f63bd50a2bff05a460a28c8/static/libs/sparkfun-samd21-mini-breakout.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Sparkfun SAMD21 Mini Breakout<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="XinaBox"><h2 class="ui header heading">XinaBox </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 890px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="XinaBox CC03" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/e07775200c5c11f0df8ff08b42378505e5b92763/static/libs/xinabox-cc03.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">XinaBox CC03<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="XinaBox CS11" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/88fca9be41de55b7af7cd4151dc06fe6f6231808/static/libs/xinabox-cs11.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">XinaBox CS11<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Misc"><h2 class="ui header heading">Misc </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 2660px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Robotics Masters Robo HAT MM1 M4" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/67375341544e7cdfb4b1ed7b523a278b81ab966b/static/libs/robotics-masters-robohatmm1-m4.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Robotics Masters Robo HAT MM1 M4<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Espressif ESP32 DevKit-C" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/0549ca9b359d68c372ee740e03b9675b0e2cca4e/static/libs/espressif-esp32-devkit-c.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Espressif ESP32 DevKit-C<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Raspberry Pi Pico RP2040" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/35d9e5b24fdd70eb5dead849e2886347d824610a/static/libs/rpi-pico.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Raspberry Pi Pico RP2040<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="RedBear BLE NANO 2" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/f8972a5abbaa2ae557e599a252f3f74b92e5b205/static/libs/redbear-ble-nano.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">RedBear BLE NANO 2<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="StichKit" aria-expanded="false" tabindex="-1"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/e98b6013e2a6b799fc9d8a35c3b2838a92dcbc2f/static/libs/stitchkit.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">StichKit<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Bluebird" aria-expanded="false" tabindex="-1"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/894b81ddb6f5a98378f8474a4bdb2f57cefa0173/static/libs/teknikio-bluebird.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Bluebird<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Brain NRF5840" aria-expanded="false" tabindex="-1"><div class="content "><div class="header">Brain NRF5840<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Add a new board" aria-expanded="false" tabindex="-1"><div class="content "><div class="header">Add a new board<div class="tags"></div></div></div></div></div></div></div><span role="button" class="carouselarrow right aligned" tabindex="0" title="See more" aria-label="See more"><i class="icon circle angle right " aria-hidden="true" role="presentation"></i></span></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Digital IO"><h2 class="ui header heading">Digital IO </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 1480px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Blinky" aria-expanded="false" tabindex="0"><div class="ui image"><label class="ui orange right ribbon label" aria-label="Blinky label">New? Start Here!</label><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/7c4b00ac137f109c4e2561cd5b38efb90ce72f4d/static/projects/digital-io/blinky/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Blinky<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Button LED" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/da8832075e12108bb475e59cd6a67680e6dad57e/static/projects/digital-io/button-led/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Button LED<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Switch LED" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/2705ff36f97d66cbf02bd529a803834e2073ad24/static/projects/digital-io/switch-led/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Switch LED<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Multi Blinky" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/2705ff36f97d66cbf02bd529a803834e2073ad24/static/projects/digital-io/switch-led/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Multi Blinky<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Analog IO"><h2 class="ui header heading">Analog IO </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 1185px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Blink to Light" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/b43920da840bb4923b6cc24e5e82fd74a5fe5565/static/projects/analog-io/blink-to-light/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Blink to Light<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Glowy" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/8c224927a2fc888b05d587b782d564e5fb3f3fa7/static/projects/analog-io/glowy/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Glowy<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Glow Light" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/8c224927a2fc888b05d587b782d564e5fb3f3fa7/static/projects/analog-io/glowy/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Glow Light<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Pixel"><h2 class="ui header heading">Pixel </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 595px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Blinky" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/9ceabdadb31aebd190b92687bf83961413f51447/static/projects/pixel/blinky/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Blinky<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Light"><h2 class="ui header heading">Light </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 890px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Rainbow" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/3293ed698d77dd61a28bdf181b33b7a76c0f1e40/static/projects/light/rainbow/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Rainbow<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Range" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/10864ba74e2a8398d4f1535d40610cae1b065d23/static/projects/light/range/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Range<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Music"><h2 class="ui header heading">Music </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 890px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Play Sound" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/dd2118c075acc537fdeaa83ae46da38a39de982e/static/projects/music/play-sound/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Play Sound<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Piano Buttons" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/fa943a575b4e116a0a1df681cd3f09e3f78a484b/static/projects/music/piano-buttons/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Piano Buttons<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Servos"><h2 class="ui header heading">Servos </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 890px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Sweep" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/dd130ef2b94b79d90f56647aaea0b1faf668cd0b/static/projects/servos/sweep/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Sweep<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Buttons" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/4151d917c7c082023461aea186b28839795d2a55/static/projects/servos/buttons/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Buttons<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="HID"><h2 class="ui header heading">HID </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 1185px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Keyboard" aria-expanded="false" tabindex="0"><div class="content "><div class="header">Keyboard<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Gamepad" aria-expanded="false" tabindex="0"><div class="content "><div class="header">Gamepad<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Mouse" aria-expanded="false" tabindex="0"><div class="content "><div class="header">Mouse<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Screen"><h2 class="ui header heading">Screen </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 890px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Console" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/fdcf5b0267cf3de366eb3285ba043bc5021f014f/static/projects/screen/console/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Console<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Graph" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/cdc5bd0e27539e53fc6b1554ea9f38bd4681c19e/static/projects/screen/graph/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Graph<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Accelerometer"><h2 class="ui header heading">Accelerometer </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 1185px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Shake" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/7d7f0b9bcb6d67484ebe07b8516f2adc92477a0e/static/projects/accelerometer/shake/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Shake<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Level" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/c74405c6003c14e5b3551151fff42a8ceaa6eae4/static/projects/accelerometer/level/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Level<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Log Values" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/723b52cebbdae3aa220511c260e269db11577c14/static/projects/accelerometer/log-values/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Log Values<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Serial"><h2 class="ui header heading">Serial </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 1480px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="console" aria-expanded="false" tabindex="0"><div class="content "><div class="header">console<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="write-data" aria-expanded="false" tabindex="0"><div class="content "><div class="header">write-data<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="read-data" aria-expanded="false" tabindex="0"><div class="content "><div class="header">read-data<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="custom" aria-expanded="false" tabindex="0"><div class="content "><div class="header">custom<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Storage"><h2 class="ui header heading">Storage </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 890px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="write file" aria-expanded="false" tabindex="0"><div class="content "><div class="header">write file<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="data logging" aria-expanded="false" tabindex="0"><div class="content "><div class="header">data logging<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="LCD"><h2 class="ui header heading">LCD </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 595px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Hello World" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/dc61f097c3a7054a26d532536fbb53b770058fe5/static/projects/lcd/hello-world/gallery.png" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Hello World<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="LoRa"><h2 class="ui header heading">LoRa </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 890px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Sender" aria-expanded="false" tabindex="0"><div class="content "><div class="header">Sender<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Receiver" aria-expanded="false" tabindex="0"><div class="content "><div class="header">Receiver<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Power"><h2 class="ui header heading">Power </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 890px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Deep Sleep" aria-expanded="false" tabindex="0"><div class="content "><div class="header">Deep Sleep<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Poke" aria-expanded="false" tabindex="0"><div class="content "><div class="header">Poke<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Bit Radio"><h2 class="ui header heading">Bit Radio </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 890px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Send Number" aria-expanded="false" tabindex="0"><div class="content "><div class="header">Send Number<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Send String" aria-expanded="false" tabindex="0"><div class="content "><div class="header">Send String<div class="tags"></div></div></div></div></div></div></div></div></div></div></div><div class="ui segment gallerysegment" role="region" aria-label="Boards"><h2 class="ui header heading">Boards </h2><div class="content"><div><div class="ui carouselouter"><div class="carouselcontainer"><div class="carouselbody" style="width: 2365px; margin-left: 0px;"><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Adafruit" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/0827c2b0eab358c6d60fe335e60cb269056d4a4b/static/libs/adafruit-circuit-playground-express.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Adafruit<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Arduino" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/a71e8ce19ff02ba5094cb5c2ca120ec7f3e7ba4a/static/libs/arduino-mkr1300.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Arduino<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Sparkfun" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/da52bdfec28ded52a96d9890ff3747a3d757e6f1/static/libs/sparkfun-samd21-dev-breakout.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Sparkfun<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Jacdac" aria-expanded="false" tabindex="0"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/6175d6b0a1e947cee2320b9700802258ac6669f6/static/libs/jacdac-iot-s2.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Jacdac<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="XinaBox" aria-expanded="false" tabindex="-1"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/e07775200c5c11f0df8ff08b42378505e5b92763/static/libs/xinabox-cc03.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">XinaBox<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Misc" aria-expanded="false" tabindex="-1"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/f8972a5abbaa2ae557e599a252f3f74b92e5b205/static/libs/redbear-ble-nano.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Misc<div class="tags"></div></div></div></div></div><div class="carouselitem "><div class="ui card  link example" role="button" aria-label="Add your board" aria-expanded="false" tabindex="-1"><div class="ui image"><div class="ui imagewrapper" aria-hidden="true" role="presentation"><div class="ui cardimage" data-src="https://cdn.makecode.com/blob/7130a1cae1925b4e96a5fb9363ac7445de3c4fbc/static/libs/bead-servo.jpg" aria-hidden="true" role="presentation"></div></div></div><div class="content "><div class="header">Add your board<div class="tags"></div></div></div></div></div></div></div><span role="button" class="carouselarrow right aligned" tabindex="0" title="See more" aria-label="See more"><i class="icon circle angle right " aria-hidden="true" role="presentation"></i></span></div></div></div></div><div class="ui horizontal small divided link list homefooter" role="contentinfo"><a class="item" target="_blank" rel="noopener noreferrer" href="https://makecode.com/">Microsoft MakeCode</a><a target="_blank" class="item" href="https://go.microsoft.com/fwlink/?LinkID=206977" rel="noopener noreferrer">Terms of Use</a><a target="_blank" class="item" href="https://go.microsoft.com/fwlink/?LinkId=521839" rel="noopener noreferrer">Privacy</a><a class="ui   item" rel="" role="button" tabindex="0"><span class="ui text">v0.15.70</span></a></div></div></div></div><div></div><div></div></div></div>
+        </div>
+    </div>
+
+    <div id="msg" aria-live="polite">
+        <div id="errmsg" class="ui red inverted segment"></div>
+        <div id="warnmsg" class="ui orange inverted segment"></div>
+        <div id="infomsg" class="ui teal inverted segment"></div>
+        <div id="compilemsg" class="ui ignored info message"></div>
+    </div>
+
+    <script>
+        // This line gets patched up by the cloud
+        var pxtConfig = {
+    "relprefix": "/---",
+    "verprefix": "",
+    "workerjs": "/---worker",
+    "tdworkerjs": "/---tdworker",
+    "monacoworkerjs": "/---monacoworker",
+    "gifworkerjs": "/---gifworker",
+    "serviceworkerjs": "/---serviceworker",
+    "typeScriptWorkerJs": "/---tsworker",
+    "pxtVersion": "?",
+    "pxtRelId": "b95bfc950d7f6bc68654e7ae095d238215830162",
+    "pxtCdnUrl": "https://cdn.makecode.com/commit/b95bfc950d7f6bc68654e7ae095d238215830162/",
+    "commitCdnUrl": "https://cdn.makecode.com/commit/b95bfc950d7f6bc68654e7ae095d238215830162/",
+    "blobCdnUrl": "https://cdn.makecode.com/commit/b95bfc950d7f6bc68654e7ae095d238215830162/",
+    "targetUrl": "https://maker.makecode.com",
+    "targetVersion": "?",
+    "targetRelId": "b95bfc950d7f6bc68654e7ae095d238215830162",
+    "targetCdnUrl": "https://cdn.makecode.com/commit/b95bfc950d7f6bc68654e7ae095d238215830162/",
+    "targetId": "maker",
+    "runUrl": "/---run",
+    "docsUrl": "/---docs",
+    "multiUrl": "/---multi",
+    "asseteditorUrl": "/---asseteditor",
+    "skillmapUrl": "/---skillmap",
+    "authcodeUrl": "/---authcode",
+    "multiplayerUrl": "/---multiplayer",
+    "kioskUrl": "/---kiosk",
+    "teacherToolUrl": "/---eval",
+    "partsUrl": "https://trg-maker.userpxt.io/---siminstructions",
+    "simUrl": "https://trg-maker.userpxt.io/---simulator",
+    "simserviceworkerUrl": "https://trg-maker.userpxt.io/---simserviceworker",
+    "simworkerconfigUrl": "https://trg-maker.userpxt.io/---simworkerconfig",
+    "cdnUrl": "https://cdn.makecode.com",
+    "ocv": {}
+};
+    </script>
+
+<!-- include apptrackingweb.html -->
+<script type="text/javascript" src="https://cdn.makecode.com/blob/cc98a310536be70624b5f87c822787c205fed9b5/pxtweb.js"></script>
+<!-- end include apptrackingweb.html -->
+
+
+<!-- include apptracking.html -->
+<script type="text/javascript">
+    window.loadAppInsights = function (includeCookie, telemetryInitializer) {
+        //Backend will patch / + blb + / with CDN url and the check that URL ends with the sha would pass
+        var isProduction = includeCookie && (/[0-9a-f]{40}\/$/.test("https://cdn.makecode.com/commit/b95bfc950d7f6bc68654e7ae095d238215830162/"));
+        !function(T,l,y){var S=T.location,k="script",D="connectionString",C="ingestionendpoint",I="disableExceptionTracking",E="ai.device.",b="toLowerCase",w="crossOrigin",N="POST",e="appInsightsSDK",t=y.name||"appInsights";(y.name||T[e])&&(T[e]=t);var n=T[t]||function(d){var g=!1,f=!1,m={initialize:!0,queue:[],sv:"5",version:2,config:d};function v(e,t){var n={},a="Browser";return n[E+"id"]=a[b](),n[E+"type"]=a,n["ai.operation.name"]=S&&S.pathname||"_unknown_",n["ai.internal.sdkVersion"]="javascript:snippet_"+(m.sv||m.version),{time:function(){var e=new Date;function t(e){var t=""+e;return 1===t.length&&(t="0"+t),t}return e.getUTCFullYear()+"-"+t(1+e.getUTCMonth())+"-"+t(e.getUTCDate())+"T"+t(e.getUTCHours())+":"+t(e.getUTCMinutes())+":"+t(e.getUTCSeconds())+"."+((e.getUTCMilliseconds()/1e3).toFixed(3)+"").slice(2,5)+"Z"}(),iKey:e,name:"Microsoft.ApplicationInsights."+e.replace(/-/g,"")+"."+t,sampleRate:100,tags:n,data:{baseData:{ver:2}}}}var h=d.url||y.src;if(h){function a(e){var t,n,a,i,r,o,s,c,u,p,l;g=!0,m.queue=[],f||(f=!0,t=h,s=function(){var e={},t=d.connectionString;if(t)for(var n=t.split(";"),a=0;a<n.length;a++){var i=n[a].split("=");2===i.length&&(e[i[0][b]()]=i[1])}if(!e[C]){var r=e.endpointsuffix,o=r?e.location:null;e[C]="https://"+(o?o+".":"")+"dc."+(r||"services.visualstudio.com")}return e}(),c=s[D]||d[D]||"",u=s[C],p=u?u+"/v2/track":d.endpointUrl,(l=[]).push((n="SDK LOAD Failure: Failed to load Application Insights SDK script (See stack for details)",a=t,i=p,(o=(r=v(c,"Exception")).data).baseType="ExceptionData",o.baseData.exceptions=[{typeName:"SDKLoadFailed",message:n.replace(/\./g,"-"),hasFullStack:!1,stack:n+"\nSnippet failed to load ["+a+"] -- Telemetry is disabled\nHelp Link: https://go.microsoft.com/fwlink/?linkid=2128109\nHost: "+(S&&S.pathname||"_unknown_")+"\nEndpoint: "+i,parsedStack:[]}],r)),l.push(function(e,t,n,a){var i=v(c,"Message"),r=i.data;r.baseType="MessageData";var o=r.baseData;return o.message='AI (Internal): 99 message:"'+("SDK LOAD Failure: Failed to load Application Insights SDK script (See stack for details) ("+n+")").replace(/\"/g,"")+'"',o.properties={endpoint:a},i}(0,0,t,p)),function(e,t){if(JSON){var n=T.fetch;if(n&&!y.useXhr)n(t,{method:N,body:JSON.stringify(e),mode:"cors"});else if(XMLHttpRequest){var a=new XMLHttpRequest;a.open(N,t),a.setRequestHeader("Content-type","application/json"),a.send(JSON.stringify(e))}}}(l,p))}function i(e,t){f||setTimeout(function(){!t&&m.core||a()},500)}var e=function(){var n=l.createElement(k);n.src=h;var e=y[w];return!e&&""!==e||"undefined"==n[w]||(n[w]=e),n.onload=i,n.onerror=a,n.onreadystatechange=function(e,t){"loaded"!==n.readyState&&"complete"!==n.readyState||i(0,t)},n}();y.ld<0?l.getElementsByTagName("head")[0].appendChild(e):setTimeout(function(){l.getElementsByTagName(k)[0].parentNode.appendChild(e)},y.ld||0)}try{m.cookie=l.cookie}catch(p){}function t(e){for(;e.length;)!function(t){m[t]=function(){var e=arguments;g||m.queue.push(function(){m[t].apply(m,e)})}}(e.pop())}var n="track",r="TrackPage",o="TrackEvent";t([n+"Event",n+"PageView",n+"Exception",n+"Trace",n+"DependencyData",n+"Metric",n+"PageViewPerformance","start"+r,"stop"+r,"start"+o,"stop"+o,"addTelemetryInitializer","setAuthenticatedUserContext","clearAuthenticatedUserContext","flush"]),m.SeverityLevel={Verbose:0,Information:1,Warning:2,Error:3,Critical:4};var s=(d.extensionConfig||{}).ApplicationInsightsAnalytics||{};if(!0!==d[I]&&!0!==s[I]){var c="onerror";t(["_"+c]);var u=T[c];T[c]=function(e,t,n,a,i){var r=u&&u(e,t,n,a,i);return!0!==r&&m["_"+c]({message:e,url:t,lineNumber:n,columnNumber:a,error:i}),r},d.autoExceptionInstrumented=!0}return m}(y.cfg);function a(){y.onInit&&y.onInit(n)}(T[t]=n).queue&&0===n.queue.length?(n.queue.push(a),n.trackPageView({})):a()}(window,document,{
+            src: "https://js.monitor.azure.com/scripts/b/ai.2.min.js", // The SDK URL Source
+            onInit: function (sdk) {
+                sdk.addTelemetryInitializer(telemetryInitializer);
+            },
+            cfg: {
+                instrumentationKey:"9801ed01-c40f-46ec-aa40-2a1742a9e71c",
+                disableAjaxTracking: true,
+                overridePageViewDuration: false,
+                disableExceptionTracking: true,
+                disableCorrelationHeaders: true,
+                disableCookiesUsage: !isProduction,
+                isStorageUseDisabled: !isProduction,
+                url: "https://cdn.makecode.com/blob/c45ac1d707915fdf8ec69d4e8de5d7677db3482a/ai.2.min.js"
+            }
+        });
+        window.appInsights=appInsights;
+
+        var location = window.location.toString();
+        appInsights.trackPageView({
+            name: window.location.hostname,
+            uri: window.location.origin,
+            properties: {
+                url: scrubUrl(location),
+                urlReferrer: scrubUrl(document.referrer.toString())
+            }
+        });
+
+        // Scrub potential PII from the URL.
+        function scrubUrl(url) {
+            if (!url) return url;
+
+            var scriptIdRegex = /(?:S?\d{5}-\d{5}-\d{5}-\d{5})|(?:_[0-9a-zA-Z]{12})/g;
+            var scrubbedUrl = new URL(url.toLocaleLowerCase().replace(scriptIdRegex, "xxxxx-xxxxx-xxxxx-xxxxx"));
+
+            // Just as a precaution, strip any suspicious query parameters.
+            var blockedParamKeywords = ["username", "password", "token", "pwd"];
+            var searchParams = Array.from(scrubbedUrl.searchParams.keys());
+            for (var param of searchParams) {
+                if (blockedParamKeywords.some(k => param.indexOf(k) != -1)) {
+                    scrubbedUrl.searchParams.delete(param);
+                }
+            }
+
+            return scrubbedUrl.toString();
+        }
+
+        return isProduction;
+    }
+    pxt.initAnalyticsAsync();
+</script>
+<!-- end include apptracking.html -->
+
+    <script type="text/javascript" src="https://cdn.makecode.com/blob/c3eb7f144f1bbecfa39ce418c4fdc3eb1796bf11/pxtapp.js"></script>
+    <script type="text/javascript" src="https://cdn.makecode.com/blob/48a616866f28da6c47d7881a8ee3821de2e4a7d8/target.js"></script>
+    <script id="mainscript" type="text/javascript" src="https://cdn.makecode.com/blob/282e8197e39448c76ef49141cc098e8dc2008d62/main.js"></script>
+    <xml id="blocklyToolboxDefinitionCategory" style="display: none">
+        <!-- An empty category is required so that Blockly launches in category mode -->
+        <category name="">
+        </category>
+    </xml>
+    <xml id="blocklyToolboxDefinitionFlyout" style="display: none">
+    </xml>
+    <script>
+        // Before loading vs/editor/editor.main, define a global MonacoEnvironment that overwrites
+        // the default worker url location (used when creating WebWorkers). The problem here is that
+        // HTML5 does not (yet) allow cross-domain web workers, so we need to proxy the instantion of
+        // a web worker through a same-domain script
+        window.MonacoEnvironment = {
+            getWorkerUrl: function(workerId, label) {
+                return pxt.webConfig.monacoworkerjs;
+            }
+        };
+
+        // this get rewritten to blob URLs with SHAs while uploading to the cloud
+        // keep in sync with release.manifest and asseteditor.html
+        window.MonacoPaths = {
+            "vs/loader": "https://cdn.makecode.com/blob/17e4c591ec47474f1e488f733acd77a1a528378d/vs/loader.js",
+            "vs/base/worker/workerMain": "https://cdn.makecode.com/blob/3edf5cb4f608aeb07473c5d7c333400e7e469dc0/vs/base/worker/workerMain.js",
+            "vs/basic-languages/bat/bat": "https://cdn.makecode.com/blob/c67b89bea8ad93bb58cd7686e001daa07e326c21/vs/basic-languages/bat/bat.js",
+            "vs/basic-languages/cpp/cpp": "https://cdn.makecode.com/blob/8743140f1aa68071ddaf925c836b045e1389bde8/vs/basic-languages/cpp/cpp.js",
+            "vs/basic-languages/markdown/markdown": "https://cdn.makecode.com/blob/e0cd73549d298474237961881b00500dbbad8638/vs/basic-languages/markdown/markdown.js",
+            "vs/basic-languages/python/python": "https://cdn.makecode.com/blob/e5e8a27fe42b8bd8079a5e770ed04a840f84832c/vs/basic-languages/python/python.js",
+            "vs/basic-languages/typescript/typescript": "https://cdn.makecode.com/blob/196f8e01f9716dee9f6da8fb53993c6100914d5f/vs/basic-languages/typescript/typescript.js",
+            "vs/editor/editor.main.css": "https://cdn.makecode.com/blob/88b279a451119201c6d16bf4a7ca982d3a2727d8/vs/editor/editor.main.css",
+            "vs/editor/editor.main": "https://cdn.makecode.com/blob/edadcbca51897cbcf45c11e9ce31db2750ea635c/vs/editor/editor.main.js",
+            "vs/editor/editor.main.nls": "https://cdn.makecode.com/blob/23ec988172113c78c24a7ed994c4628fb1a9fd32/vs/editor/editor.main.nls.js",
+            "vs/language/json/jsonMode": "https://cdn.makecode.com/blob/dfbe96a2b954d99771af6b680a09858c683ba123/vs/language/json/jsonMode.js",
+            "vs/language/json/jsonWorker": "https://cdn.makecode.com/blob/cf418d614a749960a65f0315e723d3dc36765940/vs/language/json/jsonWorker.js",
+            "vs/language/typescript/tsMode": "https://cdn.makecode.com/blob/1b9d76bcb69132f9f706a868da89b8220c2804fa/vs/language/typescript/tsMode.js",
+            "vs/language/typescript/tsWorker": "https://cdn.makecode.com/blob/39169161eed3b06ce4a6aab9a3fc0d93b678a558/vs/language/typescript/tsWorker.js",
+            "lzma/lzma_worker-min.js": "https://cdn.makecode.com/blob/d08e97ec4175dc71d21c6058a0d800eeeb1a8a0f/lzma/lzma_worker-min.js",
+            "smoothie/smoothie_compressed.js": "https://cdn.makecode.com/blob/cd329dd34330ab0c96039a5ca0882838527d2561/smoothie/smoothie_compressed.js",
+            "blockly.css": "https://cdn.makecode.com/blob/dde693708c65ebc0edfbfc43a1ebe6aeaaaf0b64/blockly.css",
+            "rtlblockly.css": "https://cdn.makecode.com/blob/ed6e0b3396062cfeae6dcc4cadb38787c1bcd2c5/rtlblockly.css",
+            "gifjs/gif.js": "https://cdn.makecode.com/blob/15eaf38ac1eee2b2e4810a1ac13e8dbee035e546/gifjs/gif.js",
+            "qrcode/qrcode.min.js": "https://cdn.makecode.com/blob/b258d18871877debfef7348f75c2e52b954c053c/qrcode/qrcode.min.js",
+            "zip.js/zip.min.js": "https://cdn.makecode.com/blob/f01355117e534954c6d268457d9a73f11ebe3330/zip.js/zip.min.js",
+            "pdf-lib/pdf-lib.min.js": "https://cdn.makecode.com/blob/8eb336e6678d79fbc5d48c7808a7c4fcddda765a/pdf-lib/pdf-lib.min.js",
+            "music-editor/apple.png": "https://cdn.makecode.com/blob/73ef19074a264a2cfda67153087c296fa85b250b/music-editor/apple.png",
+            "music-editor/burger.png": "https://cdn.makecode.com/blob/b3d5ffa224f3de1e45b4d578abe96ef79f50e703/music-editor/burger.png",
+            "music-editor/cake.png": "https://cdn.makecode.com/blob/bbd922f5a142b7ccccd30e79711d4572a925abdd/music-editor/cake.png",
+            "music-editor/car.png": "https://cdn.makecode.com/blob/95426c52fcdf1cc5aa347c2271b6f7e15127add2/music-editor/car.png",
+            "music-editor/cat.png": "https://cdn.makecode.com/blob/4e82fb734dee2198aa547eda83f028e60dc6d964/music-editor/cat.png",
+            "music-editor/cherry.png": "https://cdn.makecode.com/blob/a59b245ee3961f3000433beac007e642f338897d/music-editor/cherry.png",
+            "music-editor/clam.png": "https://cdn.makecode.com/blob/e3834306653cc61af90f3f4fb2f437ade9cae13c/music-editor/clam.png",
+            "music-editor/computer.png": "https://cdn.makecode.com/blob/b290f4d481d3ad0b9d92c98dc4690c859a3f4781/music-editor/computer.png",
+            "music-editor/crab.png": "https://cdn.makecode.com/blob/bdb629f6b2748b1f8d791396c42bc09a900f1e2e/music-editor/crab.png",
+            "music-editor/dog.png": "https://cdn.makecode.com/blob/ed6a1811687fcbb8178e2132dc6d4ba7de1479b1/music-editor/dog.png",
+            "music-editor/duck.png": "https://cdn.makecode.com/blob/34c4c3b7338dfaae78da70617d9b47a24d228efe/music-editor/duck.png",
+            "music-editor/egg.png": "https://cdn.makecode.com/blob/f5fa4fb409effcfd952dc4a19e507e1b6077f9d6/music-editor/egg.png",
+            "music-editor/explosion.png": "https://cdn.makecode.com/blob/5dea8273ce0ca702e6b18881c1a2c79d51dc13f5/music-editor/explosion.png",
+            "music-editor/fish.png": "https://cdn.makecode.com/blob/b72c72622569457905d64cbc2807b83dd6aececa/music-editor/fish.png",
+            "music-editor/ice-cream.png": "https://cdn.makecode.com/blob/6c0d7afe8c5ea6e048b05fe4d001960b32ca7492/music-editor/ice-cream.png",
+            "music-editor/lemon.png": "https://cdn.makecode.com/blob/666ae7d337e9caaeaee4cab8e9774d9ed1c8a077/music-editor/lemon.png",
+            "music-editor/snake.png": "https://cdn.makecode.com/blob/27a03db4570069e4bb7e80226abaa97c3ba1659f/music-editor/snake.png",
+            "music-editor/star.png": "https://cdn.makecode.com/blob/de5695dfbb9d94a68770023c7d16a172a3760405/music-editor/star.png",
+            "music-editor/strawberry.png": "https://cdn.makecode.com/blob/e23907601862f30291b2f7702bdb4a430711f841/music-editor/strawberry.png",
+            "music-editor/taco.png": "https://cdn.makecode.com/blob/4bf3b89c751020043a1d199d65cf9d640359dd1d/music-editor/taco.png",
+            "music-editor/bass-clef.svg": "https://cdn.makecode.com/blob/6e5dab7887eeacdd81b16a9d0762db1d0a6172ff/music-editor/bass-clef.svg",
+            "music-editor/treble-clef.svg": "https://cdn.makecode.com/blob/3e0f47cf7d8c462f30e2e5d9422cf23cca731f86/music-editor/treble-clef.svg",
+        }
+    </script>
+
+
+
+<div class=""></div><div class=""></div><div class=""></div><div class="dimmable dimmed"><div class="ReactModal__Overlay ReactModal__Overlay--after-open ui page modals dimmer transition undefined visible active"><div class="ReactModal__Content ReactModal__Content--after-open ui tiny closable modal transition visible active newproject" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="3ea79a79-9153-4aef-23bd-0e1bc805324atitle" aria-describedby="3ea79a79-9153-4aef-23bd-0e1bc805324adesc" style="margin-top: -156px;"><div id="3ea79a79-9153-4aef-23bd-0e1bc805324atitle" class="header "><h3 class="header-title" style="margin: 0px;">Create a Project </h3></div><div id="3ea79a79-9153-4aef-23bd-0e1bc805324adesc" class="  content"><div><p>Give your project a name.</p><div class="ui form"><div class="field"><label for="projectNameInput" class="accessible-hidden">Give your project a name.</label><div class="ui input"><input id="projectNameInput" class="" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value="" style=""></div></div></div></div><div><br><div class="expandable-menu"><a class="ui icon icon-and-text  no-select menu-header" rel="" role="button" tabindex="0"><i class="icon no-select chevron right icon-and-text  " aria-hidden="true" role="presentation"></i><span class="ui text">Code options</span></a></div></div></div><div class="actions"><button class="ui button icon icon-and-text  approve icon right labeled approve positive  " tabindex="0" aria-label="Create"><i class="icon check icon-and-text  " aria-hidden="true" role="presentation"></i><span class="ui text">Create</span></button></div><div role="button" class="closeIcon" tabindex="0" aria-label="Close"><i class="icon close remove circle " aria-hidden="true" role="presentation"></i></div></div></div></div><div class="blocklyWidgetDiv" tabindex="-1"></div><div class="blocklyDropDownDiv" tabindex="-1" style="opacity: 0; transition: transform 0.25s, opacity 0.25s;"><div class="blocklyDropDownContent"></div><div class="blocklyDropDownArrow"></div></div><div class="blocklyTooltipDiv"></div><div data-react-modal-body-trap="" tabindex="0" style="position: absolute; opacity: 0;"></div></body></html>
