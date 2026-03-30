@@ -78,7 +78,7 @@ async def explore():
             search_selector = "input[placeholder='Search or enter project URL...']"
             await page.wait_for_selector(search_selector, timeout=10000)
             print("Extensions dialog opened!")
-            await page.fill(search_selector, "https://github.com/microsoft/pxt-neopixel")
+            await page.fill(search_selector, "https://github.com/chatelao/pxt-neopixel")
             await page.keyboard.press("Enter")
 
             print("Searching for extension...")
